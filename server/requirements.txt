@@ -1,0 +1,13 @@
+fastapi>=0.109.2
+uvicorn[standard]
+sqlalchemy>=2.0.27
+python-jose[cryptography]
+bcrypt
+python-multipart
+pydantic>=2.6.1
+pydantic-settings>=2.1.0
+qrcode
+pillow
+python-socketio
+websockets
+alembic

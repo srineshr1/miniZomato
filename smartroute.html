@@ -1,0 +1,2574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART ROUTE — Intelligent Delivery Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --bg2: #121215;
+    --bg3: #1a1a1f;
+    --bg4: #222228;
+    --amber: #f5a623;
+    --amber-dim: #c47d0e;
+    --amber-glow: rgba(245,166,35,0.15);
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --text: #e8e8ec;
+    --text2: #9090a0;
+    --text3: #555565;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(245,166,35,0.25);
+    --radius: 12px;
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- NOISE OVERLAY ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ---- MAIN LAYOUT ---- */
+  .app { display: flex; height: 100vh; }
+
+  /* ---- SIDEBAR ---- */
+  .sidebar {
+    width: 220px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sidebar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  }
+
+  .logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-mark {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--amber);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .nav-section {
+    padding: 16px 12px 8px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin: 2px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    position: relative;
+  }
+
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+
+  .nav-item.active {
+    background: var(--amber-glow);
+    color: var(--amber);
+    border: 1px solid var(--border2);
+  }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%; transform: translateY(-50%);
+    width: 3px; height: 20px;
+    background: var(--amber);
+    border-radius: 2px;
+  }
+
+  .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+  .badge {
+    margin-left: auto;
+    background: var(--amber);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+  }
+
+  .role-switcher {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .role-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .role-tabs {
+    display: flex;
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .role-tab {
+    flex: 1;
+    padding: 6px 4px;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text3);
+    transition: all 0.2s;
+    font-family: var(--font-display);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .role-tab.active { background: var(--amber); color: #000; }
+
+  /* ---- MAIN CONTENT ---- */
+  .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+  .page { display: none; flex-direction: column; min-height: 100vh; animation: fadeIn 0.3s ease; }
+  .page.active { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ---- TOPBAR ---- */
+  .topbar {
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .page-subtitle { font-size: 12px; color: var(--text2); margin-top: 1px; }
+
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+  }
+
+  .status-pill.online { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+  .status-pill.warning { background: rgba(245,166,35,0.1); color: var(--amber); border: 1px solid var(--border2); }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--amber), var(--amber-dim));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; color: #000;
+    font-family: var(--font-display);
+  }
+
+  /* ---- CONTENT AREA ---- */
+  .content { padding: 24px 28px; flex: 1; }
+
+  /* ---- STAT CARDS ---- */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: var(--border2); }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+  }
+
+  .stat-card.amber::before { background: linear-gradient(90deg, var(--amber), transparent); }
+  .stat-card.green::before { background: linear-gradient(90deg, var(--green), transparent); }
+  .stat-card.blue::before { background: linear-gradient(90deg, var(--blue), transparent); }
+  .stat-card.red::before { background: linear-gradient(90deg, var(--red), transparent); }
+
+  .stat-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--text2); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-mono); }
+
+  .stat-delta {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+  }
+
+  .stat-delta.up { color: var(--green); }
+  .stat-delta.down { color: var(--red); }
+
+  /* ---- PANELS ---- */
+  .panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .panel-action {
+    font-size: 11px;
+    color: var(--amber);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+  }
+
+  /* ---- TABLE ---- */
+  .table { width: 100%; border-collapse: collapse; }
+
+  .table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  .table tr:last-child td { border-bottom: none; }
+  .table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ---- CHIPS ---- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+  }
+
+  .chip.delivered { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+  .chip.transit { background: rgba(245,166,35,0.1); color: var(--amber); border: 1px solid var(--border2); }
+  .chip.pending { background: rgba(255,255,255,0.05); color: var(--text2); border: 1px solid var(--border); }
+  .chip.danger { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+
+  /* ---- MAP MOCK ---- */
+  .map-container {
+    background: #0e1117;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    height: 320px;
+  }
+
+  .map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,166,35,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,166,35,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .map-road {
+    position: absolute;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+  }
+
+  .map-label {
+    position: absolute;
+    top: 16px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--amber);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.6);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+  }
+
+  .map-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+
+  .pin-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2px solid;
+    position: relative;
+  }
+
+  .pin-dot::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .pin-dot.delivery { color: var(--amber); }
+  .pin-dot.customer { color: var(--green); }
+  .pin-dot.restaurant { color: var(--blue); }
+
+  .pin-pulse {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    animation: ping 2s infinite;
+    opacity: 0;
+  }
+
+  @keyframes ping { 0% { transform: scale(0.8); opacity: 0.6; } 100% { transform: scale(2); opacity: 0; } }
+
+  .map-route {
+    position: absolute;
+    height: 2px;
+    transform-origin: left center;
+    background: linear-gradient(90deg, var(--amber), rgba(245,166,35,0.2));
+  }
+
+  .route-animated {
+    background: repeating-linear-gradient(90deg, var(--amber) 0, var(--amber) 8px, transparent 8px, transparent 16px);
+    animation: dash 1s linear infinite;
+    background-size: 200% 100%;
+  }
+
+  @keyframes dash { 0% { background-position: 0 0; } 100% { background-position: -200% 0; } }
+
+  /* ---- ORDER CARDS ---- */
+  .orders-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  .order-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .order-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+  .order-card.selected { border-color: var(--amber); background: var(--amber-glow); }
+
+  .order-num {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .order-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .order-meta { font-size: 12px; color: var(--text2); }
+
+  .order-priority {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .priority-high { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .priority-med { background: rgba(245,166,35,0.1); color: var(--amber); border: 1px solid var(--border2); }
+  .priority-low { background: rgba(255,255,255,0.04); color: var(--text3); border: 1px solid var(--border); }
+
+  .order-footer {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .order-distance { font-family: var(--font-mono); font-size: 12px; color: var(--amber); }
+  .order-eta { font-size: 11px; color: var(--text2); }
+
+  /* ---- FOOD ITEM CARDS ---- */
+  .food-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  .food-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .food-card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+
+  .food-img {
+    height: 160px;
+    background: var(--bg3);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+  }
+
+  .food-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  }
+
+  .food-tag {
+    position: absolute;
+    top: 10px; left: 10px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.7);
+    color: var(--amber);
+    border: 1px solid var(--border2);
+    letter-spacing: 0.5px;
+  }
+
+  .food-body { padding: 16px; }
+
+  .food-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .food-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  .food-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .food-price {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--amber);
+  }
+
+  .btn-add {
+    background: var(--amber);
+    color: #000;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+
+  .btn-add:hover { background: #ffc040; transform: scale(1.05); }
+
+  /* ---- QR SCANNER ---- */
+  .qr-scanner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .qr-frame {
+    width: 220px; height: 220px;
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .qr-frame::before, .qr-frame::after {
+    content: '';
+    position: absolute;
+    width: 30px; height: 30px;
+    border-color: var(--amber);
+    border-style: solid;
+  }
+
+  .qr-frame::before { top: 0; left: 0; border-width: 3px 0 0 3px; }
+  .qr-frame::after { bottom: 0; right: 0; border-width: 0 3px 3px 0; }
+
+  .qr-inner {
+    position: absolute;
+    inset: 0;
+    background: var(--bg3);
+    margin: 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    overflow: hidden;
+  }
+
+  .qr-scan-line {
+    position: absolute;
+    left: 12px; right: 12px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    animation: scanLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scanLine {
+    0% { top: 12px; }
+    100% { top: calc(100% - 12px); }
+  }
+
+  .qr-corner {
+    position: absolute;
+    width: 30px; height: 30px;
+    border-color: var(--amber);
+    border-style: solid;
+  }
+
+  .qr-corner.tr { top: 0; right: 0; border-width: 3px 3px 0 0; }
+  .qr-corner.bl { bottom: 0; left: 0; border-width: 0 0 3px 3px; }
+
+  /* ---- TRACKING ---- */
+  .tracking-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    position: relative;
+  }
+
+  .timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 40px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .timeline-dot {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline-dot.done { background: rgba(34,197,94,0.2); border: 1px solid rgba(34,197,94,0.4); }
+  .timeline-dot.active { background: rgba(245,166,35,0.2); border: 1px solid var(--amber); animation: borderPulse 2s infinite; }
+  .timeline-dot.pending { background: var(--bg3); border: 1px solid var(--border); }
+
+  @keyframes borderPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.4); } 50% { box-shadow: 0 0 0 6px rgba(245,166,35,0); } }
+
+  .timeline-content { flex: 1; }
+  .timeline-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+  .timeline-time { font-size: 11px; color: var(--text2); font-family: var(--font-mono); }
+
+  /* ---- SPEED METER ---- */
+  .speed-gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+  }
+
+  .gauge-circle {
+    width: 160px; height: 160px;
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .gauge-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+  .gauge-track { fill: none; stroke: var(--bg4); stroke-width: 12; }
+
+  .gauge-fill {
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-dasharray: 377;
+    stroke-dashoffset: 140;
+    transition: stroke-dashoffset 1s ease, stroke 0.5s;
+  }
+
+  .gauge-fill.danger { stroke: var(--red); }
+
+  .gauge-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gauge-value {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+
+  .gauge-unit { font-size: 11px; color: var(--text2); font-family: var(--font-mono); }
+
+  /* ---- VIOLATION CARDS ---- */
+  .violation-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .violation-item:last-child { border-bottom: none; }
+
+  .violation-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .violation-icon.speed { background: rgba(239,68,68,0.1); }
+  .violation-icon.helmet { background: rgba(245,166,35,0.1); }
+
+  .violation-info { flex: 1; }
+  .violation-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .violation-detail { font-size: 11px; color: var(--text2); font-family: var(--font-mono); }
+
+  .violation-count {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--red);
+  }
+
+  /* ---- ROUTE PRIORITY CARDS ---- */
+  .route-sequence {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .route-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg3);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .route-step.priority-1 { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+  .route-step.priority-2 { border-color: var(--border2); background: var(--amber-glow); }
+  .route-step.priority-3 { border-color: var(--border); }
+  .route-step.priority-4 { border-color: var(--border); }
+
+  .route-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .route-num.n1 { background: var(--red); color: #fff; }
+  .route-num.n2 { background: var(--amber); color: #000; }
+  .route-num.n3 { background: var(--bg4); color: var(--text2); }
+  .route-num.n4 { background: var(--bg4); color: var(--text2); }
+
+  .route-info { flex: 1; }
+  .route-customer { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .route-reason { font-size: 11px; color: var(--text2); font-family: var(--font-mono); }
+
+  .route-food-emoji { font-size: 22px; }
+
+  /* ---- BUTTONS ---- */
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--font-display);
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+  }
+
+  .btn-primary { background: var(--amber); color: #000; }
+  .btn-primary:hover { background: #ffc040; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(245,166,35,0.3); }
+
+  .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--border2); color: var(--amber); }
+
+  .btn-danger { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .btn-danger:hover { background: rgba(239,68,68,0.2); }
+
+  /* ---- LOGIN PAGE ---- */
+  .login-layout {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .login-left {
+    background: var(--bg2);
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-left::before {
+    content: 'SR';
+    position: absolute;
+    right: -40px; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: 300px;
+    font-weight: 900;
+    color: rgba(245,166,35,0.04);
+    line-height: 1;
+    letter-spacing: -20px;
+  }
+
+  .login-brand {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: var(--amber);
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .login-tagline {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 48px;
+    max-width: 360px;
+    line-height: 1.6;
+  }
+
+  .login-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .login-feature-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+  }
+
+  .login-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    background: var(--bg);
+  }
+
+  .login-form {
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .login-form-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .login-form-sub { font-size: 13px; color: var(--text2); margin-bottom: 32px; }
+
+  .field { margin-bottom: 16px; }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .field input, .field select {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: var(--font-body);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus, .field select:focus { border-color: var(--amber); }
+
+  .field input::placeholder { color: var(--text3); }
+
+  .field select option { background: var(--bg2); }
+
+  .login-submit {
+    width: 100%;
+    padding: 14px;
+    margin-top: 8px;
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+
+  .login-switch { text-align: center; margin-top: 20px; font-size: 13px; color: var(--text2); }
+  .login-switch a { color: var(--amber); cursor: pointer; text-decoration: none; font-weight: 600; }
+
+  /* ---- CAMERA PANEL ---- */
+  .camera-feed {
+    background: #000;
+    border-radius: var(--radius);
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .camera-feed::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(245,166,35,0.03) 0%, transparent 60%);
+  }
+
+  .camera-icon { font-size: 40px; opacity: 0.3; }
+
+  .camera-rec {
+    position: absolute;
+    top: 12px; right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 1px;
+  }
+
+  .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 1s infinite; }
+
+  .camera-corners::before, .camera-corners::after,
+  .camera-corners .c3::before, .camera-corners .c3::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    border-color: rgba(245,166,35,0.5);
+    border-style: solid;
+  }
+
+  .camera-corners::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+  .camera-corners::after { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+  /* ---- LAYOUT GRIDS ---- */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+
+  /* ---- SCROLLBAR ---- */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 4px; }
+
+  /* ---- NOTIFICATION ---- */
+  .notif-toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+    max-width: 300px;
+  }
+
+  @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  .notif-icon { font-size: 20px; }
+  .notif-title { font-weight: 600; font-size: 13px; }
+  .notif-body { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* ---- SEARCH BAR ---- */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    width: 260px;
+  }
+
+  .search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 13px;
+    font-family: var(--font-body);
+    width: 100%;
+  }
+
+  .search-bar input::placeholder { color: var(--text3); }
+
+  /* ---- LANGUAGE SWITCHER ---- */
+  .lang-switch {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .lang-btn {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    background: transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .lang-btn.active { background: var(--amber); color: #000; border-color: var(--amber); }
+
+  /* ---- ADMIN SPECIFIC ---- */
+  .partner-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .partner-row:last-child { border-bottom: none; }
+
+  .partner-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--bg4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .partner-info { flex: 1; }
+  .partner-name { font-weight: 600; font-size: 13px; }
+  .partner-orders { font-size: 11px; color: var(--text2); font-family: var(--font-mono); }
+
+  .partner-score {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    margin-right: 8px;
+  }
+
+  .score-good { color: var(--green); }
+  .score-avg { color: var(--amber); }
+  .score-bad { color: var(--red); }
+
+  /* misc */
+  .spacer { height: 20px; }
+  .text-amber { color: var(--amber); }
+  .text-mono { font-family: var(--font-mono); font-size: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .flex-between { display: flex; align-items: center; justify-content: space-between; }
+  .flex-gap { display: flex; align-items: center; gap: 10px; }
+  .hidden { display: none !important; }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--bg4);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber), #ffc040);
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  .etablock {
+    background: var(--amber-glow);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .eta-num {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--amber);
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+
+  .eta-label { font-size: 12px; color: var(--text2); }
+  .eta-sub { font-size: 11px; color: var(--text3); font-family: var(--font-mono); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" style="display:block;">
+  <div class="login-layout">
+    <div class="login-left">
+      <div class="login-brand">Smart<br>Route</div>
+      <div class="login-tagline">Intelligent delivery management with real-time tracking, smart routing, and safety monitoring.</div>
+      <div class="login-feature"><div class="login-feature-dot"></div> Smart Route Optimization with food-priority logic</div>
+      <div class="login-feature"><div class="login-feature-dot"></div> Live GPS tracking with 5-second updates</div>
+      <div class="login-feature"><div class="login-feature-dot"></div> QR-based privacy protection for customer addresses</div>
+      <div class="login-feature"><div class="login-feature-dot"></div> Helmet detection & speed monitoring</div>
+      <div class="login-feature"><div class="login-feature-dot"></div> Multi-language: English, Hindi, Telugu</div>
+    </div>
+    <div class="login-right">
+      <div class="login-form">
+        <div class="login-form-title">Welcome Back</div>
+        <div class="login-form-sub">Sign in to your Smart Route account</div>
+        <div class="field">
+          <label>Role</label>
+          <select id="roleSelect">
+            <option value="customer">Customer</option>
+            <option value="delivery">Delivery Partner</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" placeholder="you@example.com" value="demo@smartroute.in">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" value="demo1234">
+        </div>
+        <button class="btn btn-primary login-submit" onclick="doLogin()">→ Sign In</button>
+        <div class="login-switch">Don't have an account? <a onclick="showRegister()">Register</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none;">
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">Smart Route</div>
+      <div class="logo-sub">v2.4.1 · Live</div>
+    </div>
+
+    <!-- Customer Nav -->
+    <div id="customerNav">
+      <div class="nav-section">Customer</div>
+      <div class="nav-item active" onclick="showPage('customerDashboard', this)">
+        <span class="nav-icon">🏠</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('foodOrder', this)">
+        <span class="nav-icon">🍽️</span> Order Food
+      </div>
+      <div class="nav-item" onclick="showPage('trackOrder', this)">
+        <span class="nav-icon">📍</span> Track Order
+        <span class="badge">1</span>
+      </div>
+    </div>
+
+    <!-- Delivery Nav -->
+    <div id="deliveryNav" class="hidden">
+      <div class="nav-section">Delivery Partner</div>
+      <div class="nav-item active" onclick="showPage('deliveryDashboard', this)">
+        <span class="nav-icon">📦</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('qrScanner', this)">
+        <span class="nav-icon">📷</span> QR Scanner
+      </div>
+      <div class="nav-item" onclick="showPage('routeNav', this)">
+        <span class="nav-icon">🗺️</span> Navigation
+        <span class="badge">4</span>
+      </div>
+      <div class="nav-item" onclick="showPage('safetyPage', this)">
+        <span class="nav-icon">⚡</span> Safety
+      </div>
+    </div>
+
+    <!-- Admin Nav -->
+    <div id="adminNav" class="hidden">
+      <div class="nav-section">Admin</div>
+      <div class="nav-item active" onclick="showPage('adminDashboard', this)">
+        <span class="nav-icon">📊</span> Overview
+      </div>
+      <div class="nav-item" onclick="showPage('adminOrders', this)">
+        <span class="nav-icon">📋</span> Orders
+        <span class="badge">12</span>
+      </div>
+      <div class="nav-item" onclick="showPage('adminPartners', this)">
+        <span class="nav-icon">🛵</span> Partners
+      </div>
+      <div class="nav-item" onclick="showPage('adminViolations', this)">
+        <span class="nav-icon">⚠️</span> Violations
+        <span class="badge danger" style="background:rgba(239,68,68,0.2);color:var(--red);">3</span>
+      </div>
+    </div>
+
+    <div class="role-switcher">
+      <div class="role-label">View As</div>
+      <div class="role-tabs">
+        <div class="role-tab active" id="tab-customer" onclick="switchRole('customer')">C</div>
+        <div class="role-tab" id="tab-delivery" onclick="switchRole('delivery')">D</div>
+        <div class="role-tab" id="tab-admin" onclick="switchRole('admin')">A</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ===== CUSTOMER DASHBOARD ===== -->
+    <div class="page active" id="customerDashboard">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Good Morning, Ricky 👋</div>
+          <div class="page-subtitle">Hyderabad, Telangana · 2 active orders</div>
+        </div>
+        <div class="topbar-right">
+          <div class="lang-switch">
+            <button class="lang-btn active">EN</button>
+            <button class="lang-btn">HI</button>
+            <button class="lang-btn">TE</button>
+          </div>
+          <div class="status-pill online"><div class="dot"></div> Live Tracking</div>
+          <div class="avatar">R</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="stats-grid">
+          <div class="stat-card amber">
+            <div class="stat-icon">🛵</div>
+            <div class="stat-value">2</div>
+            <div class="stat-label">Active Orders</div>
+            <div class="stat-delta up">+1 today</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value">47</div>
+            <div class="stat-label">Delivered</div>
+            <div class="stat-delta up">All time</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-value">18</div>
+            <div class="stat-label">Avg ETA (min)</div>
+            <div class="stat-delta up">-3 vs avg</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">₹840</div>
+            <div class="stat-label">This Month</div>
+          </div>
+        </div>
+
+        <div class="three-col">
+          <!-- Active Order -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Active Order</div>
+              <div class="panel-action" onclick="showPage('trackOrder', null)">Track →</div>
+            </div>
+            <div style="padding:20px;">
+              <div class="etablock">
+                <div>
+                  <div class="eta-num">14</div>
+                  <div class="eta-label">minutes away</div>
+                  <div class="eta-sub">EST. 7:42 PM</div>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Chicken Biryani + Raita</div>
+                  <div style="font-size:12px;color:var(--text2);">Paradise Biryani, Secunderabad</div>
+                  <div class="progress-bar mt-16">
+                    <div class="progress-fill" style="width:65%;"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text3);font-family:var(--font-mono);">
+                    <span>PICKED UP</span><span>EN ROUTE</span><span>DELIVERED</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="spacer"></div>
+
+              <div class="map-container" style="height:240px;">
+                <div class="map-grid"></div>
+                <div class="map-label">📡 LIVE TRACKING</div>
+                <!-- Roads -->
+                <div class="map-road" style="left:0;right:0;top:45%;height:40px;transform:rotate(-3deg);"></div>
+                <div class="map-road" style="top:0;bottom:0;left:35%;width:30px;"></div>
+                <div class="map-road" style="left:0;right:0;top:20%;height:24px;transform:rotate(2deg);opacity:0.5;"></div>
+                <!-- Route line -->
+                <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 400 240">
+                  <path d="M 80 180 Q 150 160 200 130 Q 250 100 300 80" stroke="#f5a623" stroke-width="2" stroke-dasharray="6 4" fill="none" opacity="0.7"/>
+                </svg>
+                <!-- Pins -->
+                <div class="map-pin" style="left:22%;top:74%;">
+                  <div class="pin-dot restaurant" style="color:var(--blue);">
+                    <div class="pin-pulse" style="color:var(--blue);"></div>
+                  </div>
+                </div>
+                <!-- Delivery partner moving -->
+                <div class="map-pin" style="left:48%;top:54%;" id="deliveryPin">
+                  <div style="background:var(--amber);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;border:2px solid #000;">🛵</div>
+                  <div class="pin-pulse" style="color:var(--amber);position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--amber);animation:ping 2s infinite;opacity:0;"></div>
+                </div>
+                <div class="map-pin" style="left:74%;top:34%;">
+                  <div class="pin-dot customer" style="color:var(--green);">
+                    <div class="pin-pulse" style="color:var(--green);"></div>
+                  </div>
+                </div>
+                <!-- Labels -->
+                <div style="position:absolute;left:4%;top:78%;font-size:9px;color:var(--blue);font-family:var(--font-mono);background:rgba(0,0,0,0.6);padding:2px 6px;border-radius:3px;">🍽 RESTO</div>
+                <div style="position:absolute;left:54%;top:38%;font-size:9px;color:var(--green);font-family:var(--font-mono);background:rgba(0,0,0,0.6);padding:2px 6px;border-radius:3px;">🏠 YOU</div>
+              </div>
+
+              <div style="margin-top:16px;padding:12px;background:rgba(245,166,35,0.05);border:1px solid var(--border2);border-radius:8px;font-size:12px;color:var(--text2);">
+                🔒 Delivery partner's exact location is hidden until they're within 500m of your location.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Recent Orders</div>
+              </div>
+              <div class="violation-item">
+                <div style="font-size:24px;">🍕</div>
+                <div class="violation-info">
+                  <div class="violation-name">Pepperoni Pizza</div>
+                  <div class="violation-detail">Yesterday · ₹380</div>
+                </div>
+                <span class="chip delivered">✓ Done</span>
+              </div>
+              <div class="violation-item">
+                <div style="font-size:24px;">🍦</div>
+                <div class="violation-info">
+                  <div class="violation-name">Ice Cream Sundae</div>
+                  <div class="violation-detail">2 days ago · ₹190</div>
+                </div>
+                <span class="chip delivered">✓ Done</span>
+              </div>
+              <div class="violation-item">
+                <div style="font-size:24px;">🍔</div>
+                <div class="violation-info">
+                  <div class="violation-name">Smash Burger</div>
+                  <div class="violation-detail">3 days ago · ₹290</div>
+                </div>
+                <span class="chip delivered">✓ Done</span>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Quick Reorder</div></div>
+              <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+                <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="showPage('foodOrder', null)">🍽️ Order Again</button>
+                <button class="btn btn-ghost" style="width:100%;justify-content:center;">📍 Change Address</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FOOD ORDER PAGE ===== -->
+    <div class="page" id="foodOrder">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Order Food</div>
+          <div class="page-subtitle">156 items available near you</div>
+        </div>
+        <div class="topbar-right">
+          <div class="search-bar">
+            <span style="color:var(--text3);">🔍</span>
+            <input placeholder="Search food, restaurants...">
+          </div>
+          <button class="btn btn-ghost" style="gap:6px;">🛒 Cart (3)</button>
+        </div>
+      </div>
+      <div class="content">
+        <!-- Category chips -->
+        <div style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;">
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--amber);color:#000;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font-display);letter-spacing:0.5px;">All</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap;">🍚 Biryani</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap;">🍕 Pizza</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap;">🍦 Ice Cream</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap;">🍔 Burgers</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap;">🍜 Noodles</div>
+        </div>
+
+        <!-- Alert for ice cream priority -->
+        <div style="padding:12px 16px;background:rgba(245,166,35,0.08);border:1px solid var(--border2);border-radius:8px;margin-bottom:20px;font-size:12px;color:var(--amber);display:flex;align-items:center;gap:8px;">
+          🧊 <strong>Ice Cream orders get priority routing</strong> — our system ensures they're delivered first to prevent melting!
+        </div>
+
+        <div class="food-grid">
+          <!-- Food items -->
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(135deg,#1a0f00,#2d1800);">
+              🍗<div class="food-img-overlay"></div>
+              <div class="food-tag">BESTSELLER</div>
+            </div>
+            <div class="food-body">
+              <div class="food-name">Chicken Biryani</div>
+              <div class="food-desc">Fragrant basmati rice with tender chicken, slow-cooked with spices</div>
+            </div>
+            <div class="food-footer">
+              <div class="food-price">₹280</div>
+              <button class="btn-add">+ Add</button>
+            </div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(135deg,#001a1a,#002828);">
+              🍦<div class="food-img-overlay"></div>
+              <div class="food-tag" style="background:rgba(239,68,68,0.8);color:white;border-color:transparent;">⚡ PRIORITY</div>
+            </div>
+            <div class="food-body">
+              <div class="food-name">Belgian Waffle Sundae</div>
+              <div class="food-desc">3 scoops of Belgian chocolate ice cream, waffle, caramel drizzle</div>
+            </div>
+            <div class="food-footer">
+              <div class="food-price">₹195</div>
+              <button class="btn-add">+ Add</button>
+            </div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(135deg,#1a0000,#2d0000);">
+              🍕<div class="food-img-overlay"></div>
+              <div class="food-tag">NEW</div>
+            </div>
+            <div class="food-body">
+              <div class="food-name">Double Pepperoni</div>
+              <div class="food-desc">Stone-baked, double layer mozzarella, spicy pepperoni, basil</div>
+            </div>
+            <div class="food-footer">
+              <div class="food-price">₹420</div>
+              <button class="btn-add">+ Add</button>
+            </div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(135deg,#0d1a00,#1a2d00);">
+              🥗<div class="food-img-overlay"></div>
+              <div class="food-tag">HEALTHY</div>
+            </div>
+            <div class="food-body">
+              <div class="food-name">Quinoa Power Bowl</div>
+              <div class="food-desc">Grilled veggies, quinoa, tahini dressing, pomegranate seeds</div>
+            </div>
+            <div class="food-footer">
+              <div class="food-price">₹310</div>
+              <button class="btn-add">+ Add</button>
+            </div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(135deg,#1a0a00,#2d1500);">
+              🍔<div class="food-img-overlay"></div>
+              <div class="food-tag">SPICY 🌶️</div>
+            </div>
+            <div class="food-body">
+              <div class="food-name">Smash Burger</div>
+              <div class="food-desc">Double smashed patty, ghost pepper sauce, pickled jalapeños</div>
+            </div>
+            <div class="food-footer">
+              <div class="food-price">₹340</div>
+              <button class="btn-add">+ Add</button>
+            </div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(135deg,#001500,#002400);">
+              🍜<div class="food-img-overlay"></div>
+              <div class="food-tag">VEG</div>
+            </div>
+            <div class="food-body">
+              <div class="food-name">Pad Thai Noodles</div>
+              <div class="food-desc">Rice noodles, tofu, bean sprouts, peanuts, tamarind sauce</div>
+            </div>
+            <div class="food-footer">
+              <div class="food-price">₹220</div>
+              <button class="btn-add">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TRACK ORDER ===== -->
+    <div class="page" id="trackOrder">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Track Order</div>
+          <div class="page-subtitle">Order #SR-2847 · Est. 14 min</div>
+        </div>
+        <div class="topbar-right">
+          <div class="status-pill online"><div class="dot"></div> Partner Online</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="two-col">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div class="etablock">
+              <div>
+                <div class="eta-num" id="etaCount">14</div>
+                <div class="eta-label">mins to arrival</div>
+                <div class="eta-sub">Updating live every 5s</div>
+              </div>
+              <div style="flex:1;padding-left:16px;border-left:1px solid var(--border2);">
+                <div style="font-size:12px;color:var(--text2);margin-bottom:4px;">DELIVERY PARTNER</div>
+                <div style="font-weight:600;font-size:14px;">Arjun Kumar</div>
+                <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);">Rating: ⭐ 4.8 · 1,240 deliveries</div>
+                <div style="margin-top:8px;display:flex;gap:6px;">
+                  <button class="btn btn-ghost" style="padding:5px 12px;font-size:11px;">📞 Call</button>
+                  <button class="btn btn-ghost" style="padding:5px 12px;font-size:11px;">💬 Chat</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Delivery Progress</div></div>
+              <div style="padding:20px;">
+                <div class="tracking-timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-dot done">✓</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Order Confirmed</div>
+                      <div class="timeline-time">7:18 PM · Paradise Biryani accepted your order</div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot done">✓</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Order Prepared</div>
+                      <div class="timeline-time">7:28 PM · Food is ready and packed</div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot done">✓</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Picked Up</div>
+                      <div class="timeline-time">7:31 PM · Arjun picked up your order (QR scanned)</div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot active">🛵</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title" style="color:var(--amber);">On the Way</div>
+                      <div class="timeline-time">7:32 PM · 3.2 km remaining</div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot pending">🏠</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title" style="color:var(--text3);">Delivered</div>
+                      <div class="timeline-time" style="color:var(--text3);">Est. 7:46 PM</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div class="map-container" style="height:360px;">
+              <div class="map-grid"></div>
+              <div class="map-label">📡 LIVE MAP</div>
+              <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 400 360">
+                <!-- roads -->
+                <rect x="0" y="160" width="400" height="36" fill="rgba(255,255,255,0.04)" rx="2"/>
+                <rect x="160" y="0" width="28" height="360" fill="rgba(255,255,255,0.04)" rx="2"/>
+                <rect x="0" y="60" width="400" height="20" fill="rgba(255,255,255,0.03)" rx="2"/>
+                <!-- route -->
+                <path d="M 60 290 Q 100 240 160 196 Q 230 156 280 100" stroke="#f5a623" stroke-width="2.5" stroke-dasharray="8 5" fill="none"/>
+                <!-- done section -->
+                <path d="M 60 290 Q 100 240 160 196" stroke="#22c55e" stroke-width="2.5" fill="none"/>
+              </svg>
+              <!-- Restaurant -->
+              <div style="position:absolute;left:12%;top:78%;transform:translate(-50%,-50%);">
+                <div style="background:rgba(59,130,246,0.2);border:2px solid var(--blue);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;">🍽</div>
+              </div>
+              <!-- Delivery -->
+              <div style="position:absolute;left:40%;top:55%;transform:translate(-50%,-50%);" id="trackPin">
+                <div style="background:var(--amber);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid #000;box-shadow:0 0 12px rgba(245,166,35,0.6);">🛵</div>
+              </div>
+              <!-- Home -->
+              <div style="position:absolute;left:70%;top:28%;transform:translate(-50%,-50%);">
+                <div style="background:rgba(34,197,94,0.2);border:2px solid var(--green);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;">🏠</div>
+              </div>
+              <!-- Traffic alert -->
+              <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:6px;padding:6px 12px;font-size:11px;color:var(--red);font-family:var(--font-mono);white-space:nowrap;">
+                ⚠ Traffic detected — alternate route selected
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Order Details</div></div>
+              <div style="padding:16px;">
+                <div class="violation-item" style="padding:10px 0;">
+                  <div style="font-size:20px;">🍗</div>
+                  <div class="violation-info"><div class="violation-name">Chicken Biryani</div><div class="violation-detail">x1 · ₹280</div></div>
+                </div>
+                <div class="violation-item" style="padding:10px 0;">
+                  <div style="font-size:20px;">🥤</div>
+                  <div class="violation-info"><div class="violation-name">Raita</div><div class="violation-detail">x1 · ₹60</div></div>
+                </div>
+                <div style="padding:10px 0;display:flex;justify-content:space-between;border-top:1px solid var(--border);margin-top:8px;">
+                  <span style="color:var(--text2);font-size:13px;">Total Paid</span>
+                  <span style="font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--amber);">₹380</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DELIVERY DASHBOARD ===== -->
+    <div class="page" id="deliveryDashboard">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Delivery Dashboard</div>
+          <div class="page-subtitle">4 orders available · Accept up to 4</div>
+        </div>
+        <div class="topbar-right">
+          <div class="status-pill online"><div class="dot"></div> Online</div>
+          <div class="avatar">A</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="stats-grid">
+          <div class="stat-card amber">
+            <div class="stat-icon">📦</div>
+            <div class="stat-value">4</div>
+            <div class="stat-label">Pending Orders</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value">12</div>
+            <div class="stat-label">Delivered Today</div>
+            <div class="stat-delta up">+2 vs avg</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value">4.8</div>
+            <div class="stat-label">Safety Score</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon">💵</div>
+            <div class="stat-value">₹1,240</div>
+            <div class="stat-label">Today's Earnings</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Available Orders</div>
+          <div style="font-size:12px;color:var(--text2);">Select up to 4 · <span style="color:var(--amber);">2 selected</span></div>
+        </div>
+
+        <div class="orders-grid">
+          <div class="order-card selected">
+            <div class="order-num">ORDER #SR-2847</div>
+            <div class="order-name">Chicken Biryani Set</div>
+            <div class="order-meta">Paradise Biryani → Jubilee Hills</div>
+            <div class="order-priority priority-med">🔥 MEDIUM</div>
+            <div class="order-footer">
+              <div class="order-distance">2.4 km</div>
+              <div class="order-eta">Est. 18 min · ₹65</div>
+            </div>
+          </div>
+
+          <div class="order-card selected">
+            <div class="order-num">ORDER #SR-2848</div>
+            <div class="order-name">Ice Cream Sundae</div>
+            <div class="order-meta">Baskin Robbins → Banjara Hills</div>
+            <div class="order-priority priority-high">🧊 DELIVER FIRST</div>
+            <div class="order-footer">
+              <div class="order-distance">3.8 km</div>
+              <div class="order-eta">Est. 25 min · ₹45</div>
+            </div>
+          </div>
+
+          <div class="order-card">
+            <div class="order-num">ORDER #SR-2849</div>
+            <div class="order-name">Smash Burger Combo</div>
+            <div class="order-meta">Burger Joint → Kondapur</div>
+            <div class="order-priority priority-low">NORMAL</div>
+            <div class="order-footer">
+              <div class="order-distance">1.9 km</div>
+              <div class="order-eta">Est. 14 min · ₹55</div>
+            </div>
+          </div>
+
+          <div class="order-card">
+            <div class="order-num">ORDER #SR-2850</div>
+            <div class="order-name">Pad Thai Noodles</div>
+            <div class="order-meta">Thai Spice → Gachibowli</div>
+            <div class="order-priority priority-low">NORMAL</div>
+            <div class="order-footer">
+              <div class="order-distance">4.1 km</div>
+              <div class="order-eta">Est. 30 min · ₹70</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;display:flex;gap:12px;align-items:center;">
+          <button class="btn btn-primary" onclick="showPage('routeNav', null)">⚡ Accept & Optimize Route</button>
+          <button class="btn btn-ghost">Clear Selection</button>
+          <div style="margin-left:auto;font-size:12px;color:var(--text2);font-family:var(--font-mono);">MAX 4 ORDERS PER BATCH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== QR SCANNER ===== -->
+    <div class="page" id="qrScanner">
+      <div class="topbar">
+        <div>
+          <div class="page-title">QR Scanner</div>
+          <div class="page-subtitle">Scan to unlock customer address</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="two-col" style="max-width:800px;margin:0 auto;">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Scan Order QR</div></div>
+            <div class="qr-scanner">
+              <div class="qr-frame">
+                <div class="qr-inner">
+                  <div style="font-size:80px;">⬛</div>
+                  <div class="qr-scan-line"></div>
+                </div>
+                <div class="qr-corner tr"></div>
+                <div class="qr-corner bl"></div>
+              </div>
+              <div style="text-align:center;margin-bottom:20px;">
+                <div style="font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:1px;margin-bottom:4px;">WAITING FOR QR SCAN</div>
+                <div style="font-size:12px;color:var(--text2);">Point camera at order QR code at pickup</div>
+              </div>
+              <button class="btn btn-primary" onclick="simulateScan()">📷 Simulate Scan (Demo)</button>
+            </div>
+          </div>
+
+          <div class="panel" id="scanResult" style="display:none;">
+            <div class="panel-header">
+              <div class="panel-title" style="color:var(--green);">✓ QR Scanned!</div>
+            </div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:12px;">
+              <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:14px;">
+                <div style="font-size:11px;color:var(--green);font-family:var(--font-mono);letter-spacing:1px;margin-bottom:6px;">ADDRESS UNLOCKED</div>
+                <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Flat 4B, Prestige Tower</div>
+                <div style="font-size:13px;color:var(--text2);">Road No. 12, Banjara Hills</div>
+                <div style="font-size:13px;color:var(--text2);">Hyderabad - 500034</div>
+                <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);margin-top:8px;">LANDMARK: Near Taj Banjara Hotel</div>
+              </div>
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);">
+                <div>ORDER ID: SR-2848</div>
+                <div>CUSTOMER: *** masked ***</div>
+                <div>SCANNED: 7:31 PM</div>
+              </div>
+              <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="showPage('routeNav', null)">🗺️ Start Navigation</button>
+            </div>
+          </div>
+
+          <div class="panel" id="scanPlaceholder">
+            <div class="panel-header"><div class="panel-title">Privacy System</div></div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:12px;">
+              <div style="background:var(--amber-glow);border:1px solid var(--border2);border-radius:8px;padding:14px;">
+                <div style="font-size:11px;color:var(--amber);font-family:var(--font-mono);margin-bottom:6px;">ADDRESS HIDDEN</div>
+                <div style="font-size:13px;color:var(--text2);">Exact address revealed only after QR scan at pickup location</div>
+              </div>
+              <div class="tracking-timeline">
+                <div class="timeline-item">
+                  <div class="timeline-dot done">✓</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title" style="font-size:13px;">Order Accepted</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot active">📷</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title" style="font-size:13px;color:var(--amber);">Scan QR at Pickup</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot pending">🔓</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title" style="font-size:13px;color:var(--text3);">Address Unlocked</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ROUTE NAVIGATION ===== -->
+    <div class="page" id="routeNav">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Smart Navigation</div>
+          <div class="page-subtitle">Optimized route · 4 stops</div>
+        </div>
+        <div class="topbar-right">
+          <div class="status-pill warning"><div class="dot"></div> Traffic Ahead</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="three-col">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <!-- Map -->
+            <div class="map-container" style="height:300px;">
+              <div class="map-grid"></div>
+              <div class="map-label">🗺 OPTIMIZED ROUTE</div>
+              <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 400 300">
+                <rect x="0" y="130" width="400" height="32" fill="rgba(255,255,255,0.04)"/>
+                <rect x="130" y="0" width="26" height="300" fill="rgba(255,255,255,0.04)"/>
+                <rect x="280" y="0" width="20" height="300" fill="rgba(255,255,255,0.03)"/>
+                <!-- Optimized multi-stop route -->
+                <path d="M 50 250 Q 90 200 130 150 Q 160 110 200 90" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="8 4" fill="none"/>
+                <path d="M 200 90 Q 240 70 280 80 Q 310 88 340 120" stroke="#f5a623" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+                <path d="M 340 120 Q 350 160 340 200" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+                <!-- Traffic block -->
+                <rect x="315" y="100" width="50" height="40" fill="rgba(239,68,68,0.08)" rx="4"/>
+                <text x="320" y="122" font-size="8" fill="#ef4444" font-family="monospace">TRAFFIC</text>
+                <!-- Stops -->
+                <circle cx="50" cy="250" r="6" fill="#f5a623" stroke="#000" stroke-width="2"/>
+                <circle cx="200" cy="90" r="7" fill="#ef4444" stroke="#000" stroke-width="2"/>
+                <circle cx="340" cy="120" r="6" fill="#22c55e" stroke="#000" stroke-width="2"/>
+                <circle cx="340" cy="200" r="6" fill="#3b82f6" stroke="#000" stroke-width="2"/>
+                <!-- Labels -->
+                <text x="55" y="265" font-size="8" fill="#f5a623" font-family="monospace">YOU</text>
+                <text x="185" y="82" font-size="8" fill="#ef4444" font-family="monospace">🧊 STOP 1</text>
+                <text x="345" y="118" font-size="8" fill="#22c55e" font-family="monospace">STOP 2</text>
+                <text x="345" y="215" font-size="8" fill="#3b82f6" font-family="monospace">STOP 3</text>
+              </svg>
+            </div>
+
+            <!-- Turn by turn -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Turn-by-Turn</div>
+                <div class="status-pill warning" style="font-size:10px;padding:4px 8px;"><div class="dot"></div> 2.4km</div>
+              </div>
+              <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--amber-glow);border:1px solid var(--border2);border-radius:8px;">
+                  <div style="font-size:24px;">↑</div>
+                  <div>
+                    <div style="font-weight:600;font-size:13px;">Continue on Road No. 12</div>
+                    <div style="font-size:11px;color:var(--text2);font-family:var(--font-mono);">400m ahead</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg3);border-radius:8px;">
+                  <div style="font-size:24px;color:var(--text2);">↰</div>
+                  <div>
+                    <div style="font-weight:500;font-size:13px;color:var(--text2);">Turn left at Taj Signal</div>
+                    <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);">900m ahead</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:10px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;">
+                  <div style="font-size:20px;">⚠️</div>
+                  <div>
+                    <div style="font-weight:600;font-size:12px;color:var(--red);">Traffic on main road</div>
+                    <div style="font-size:11px;color:var(--text2);font-family:var(--font-mono);">Taking alternate via Film Nagar</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route sequence -->
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Delivery Sequence</div>
+                <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);">AI OPTIMIZED</div>
+              </div>
+              <div class="route-sequence">
+                <div class="route-step priority-1">
+                  <div class="route-num n1">1</div>
+                  <div class="route-food-emoji">🧊</div>
+                  <div class="route-info">
+                    <div class="route-customer">Ice Cream Sundae</div>
+                    <div class="route-reason">⚡ DELIVER FIRST — melts in 20min</div>
+                  </div>
+                </div>
+                <div class="route-step priority-2">
+                  <div class="route-num n2">2</div>
+                  <div class="route-food-emoji">🍗</div>
+                  <div class="route-info">
+                    <div class="route-customer">Chicken Biryani</div>
+                    <div class="route-reason">Nearest after stop 1 · 1.2km</div>
+                  </div>
+                </div>
+                <div class="route-step priority-3">
+                  <div class="route-num n3">3</div>
+                  <div class="route-food-emoji">🍔</div>
+                  <div class="route-info">
+                    <div class="route-customer">Smash Burger</div>
+                    <div class="route-reason">On return route · 2.1km</div>
+                  </div>
+                </div>
+                <div class="route-step priority-4">
+                  <div class="route-num n4">4</div>
+                  <div class="route-food-emoji">🍜</div>
+                  <div class="route-info">
+                    <div class="route-customer">Pad Thai Noodles</div>
+                    <div class="route-reason">Final stop · 4.1km total</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Route Stats</div></div>
+              <div style="padding:16px;display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;justify-content:space-between;font-size:13px;">
+                  <span style="color:var(--text2);">Total Distance</span>
+                  <span style="font-family:var(--font-mono);color:var(--amber);">8.6 km</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;">
+                  <span style="color:var(--text2);">Est. Duration</span>
+                  <span style="font-family:var(--font-mono);">42 min</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;">
+                  <span style="color:var(--text2);">Algorithm</span>
+                  <span style="font-family:var(--font-mono);color:var(--text3);">NN + Priority</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;">
+                  <span style="color:var(--text2);">Traffic Factor</span>
+                  <span style="font-family:var(--font-mono);color:var(--red);">High</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SAFETY PAGE ===== -->
+    <div class="page" id="safetyPage">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Safety Monitor</div>
+          <div class="page-subtitle">Speed, helmet detection & delivery cam</div>
+        </div>
+        <div class="topbar-right">
+          <div class="status-pill online"><div class="dot"></div> All Systems OK</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="two-col">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <!-- Speed gauge -->
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Live Speed</div><div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);">LIMIT: 60 KM/H</div></div>
+              <div class="speed-gauge">
+                <div class="gauge-circle">
+                  <svg class="gauge-svg" viewBox="0 0 120 120">
+                    <circle class="gauge-track" cx="60" cy="60" r="50"/>
+                    <circle class="gauge-fill" id="speedArc" cx="60" cy="60" r="50"/>
+                  </svg>
+                  <div class="gauge-center">
+                    <div class="gauge-value" id="speedVal">38</div>
+                    <div class="gauge-unit">km/h</div>
+                  </div>
+                </div>
+                <div style="font-family:var(--font-mono);font-size:11px;color:var(--green);">✓ WITHIN LIMIT</div>
+                <div style="margin-top:12px;display:flex;gap:8px;">
+                  <button class="btn btn-ghost" style="font-size:11px;" onclick="setSpeed(45)">45 km/h</button>
+                  <button class="btn btn-ghost" style="font-size:11px;" onclick="setSpeed(65)">65 km/h</button>
+                  <button class="btn btn-danger" style="font-size:11px;" onclick="setSpeed(80)">80 km/h</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Helmet detection -->
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Helmet Detection</div></div>
+              <div style="padding:20px;">
+                <div style="display:flex;align-items:center;gap:16px;padding:16px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:10px;">
+                  <div style="font-size:36px;">⛑️</div>
+                  <div>
+                    <div style="font-weight:700;font-size:15px;color:var(--green);">HELMET DETECTED</div>
+                    <div style="font-size:12px;color:var(--text2);">Continuous monitoring active</div>
+                    <div style="font-size:11px;font-family:var(--font-mono);color:var(--text3);margin-top:4px;">Last checked: 2 sec ago</div>
+                  </div>
+                </div>
+                <div style="margin-top:12px;font-size:12px;color:var(--text2);">
+                  Violations this week: <span style="color:var(--amber);font-weight:600;">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <!-- Camera feed -->
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Journey Camera</div><span class="chip danger">● REC</span></div>
+              <div style="padding:16px;">
+                <div class="camera-feed">
+                  <div class="camera-icon">📷</div>
+                  <div class="camera-rec"><div class="rec-dot"></div> RECORDING</div>
+                  <div style="position:absolute;inset:0;pointer-events:none;">
+                    <div style="position:absolute;top:8px;left:8px;width:16px;height:16px;border-top:2px solid rgba(245,166,35,0.5);border-left:2px solid rgba(245,166,35,0.5);"></div>
+                    <div style="position:absolute;bottom:8px;right:8px;width:16px;height:16px;border-bottom:2px solid rgba(245,166,35,0.5);border-right:2px solid rgba(245,166,35,0.5);"></div>
+                  </div>
+                  <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;color:rgba(255,255,255,0.3);">MOTION DETECTED ● ACTIVE</div>
+                </div>
+                <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
+                  <div style="display:flex;justify-content:space-between;font-size:12px;">
+                    <span style="color:var(--text2);">Camera Status</span>
+                    <span style="color:var(--green);font-family:var(--font-mono);">CLEAR</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:12px;">
+                    <span style="color:var(--text2);">Motion Detection</span>
+                    <span style="color:var(--green);font-family:var(--font-mono);">ACTIVE</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:12px;">
+                    <span style="color:var(--text2);">Tampering Detected</span>
+                    <span style="color:var(--green);font-family:var(--font-mono);">NONE</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Violations history -->
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">Violation History</div></div>
+              <div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;padding:30px;">
+                <div style="font-size:30px;margin-bottom:8px;">🏆</div>
+                No violations this week!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ADMIN DASHBOARD ===== -->
+    <div class="page" id="adminDashboard">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Admin Overview</div>
+          <div class="page-subtitle">Smart Route Control Center</div>
+        </div>
+        <div class="topbar-right">
+          <div class="status-pill online"><div class="dot"></div> Platform Healthy</div>
+          <div class="avatar">⚙</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="stats-grid">
+          <div class="stat-card amber">
+            <div class="stat-icon">📦</div>
+            <div class="stat-value">247</div>
+            <div class="stat-label">Orders Today</div>
+            <div class="stat-delta up">↑ 18%</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">🛵</div>
+            <div class="stat-value">34</div>
+            <div class="stat-label">Active Partners</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-value">21</div>
+            <div class="stat-label">Avg Delivery (min)</div>
+            <div class="stat-delta down">↑ 3 vs yest</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-value">3</div>
+            <div class="stat-label">Violations Today</div>
+            <div class="stat-delta down">↑ 2</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Live Orders</div><span class="chip transit">12 In Transit</span></div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Partner</th>
+                  <th>Status</th>
+                  <th>ETA</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="text-mono text-amber">#SR-2847</span></td>
+                  <td>Ricky S.</td>
+                  <td>Arjun K.</td>
+                  <td><span class="chip transit">In Transit</span></td>
+                  <td><span class="text-mono">14 min</span></td>
+                </tr>
+                <tr>
+                  <td><span class="text-mono text-amber">#SR-2848</span></td>
+                  <td>Priya M.</td>
+                  <td>Rahul D.</td>
+                  <td><span class="chip transit">In Transit</span></td>
+                  <td><span class="text-mono">8 min</span></td>
+                </tr>
+                <tr>
+                  <td><span class="text-mono text-amber">#SR-2845</span></td>
+                  <td>Aarav S.</td>
+                  <td>Kiran P.</td>
+                  <td><span class="chip delivered">Delivered</span></td>
+                  <td><span class="text-mono">—</span></td>
+                </tr>
+                <tr>
+                  <td><span class="text-mono text-amber">#SR-2844</span></td>
+                  <td>Sneha R.</td>
+                  <td>Suresh V.</td>
+                  <td><span class="chip pending">Pending</span></td>
+                  <td><span class="text-mono">35 min</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Recent Violations</div></div>
+            <div class="violation-item">
+              <div class="violation-icon speed">🚀</div>
+              <div class="violation-info">
+                <div class="violation-name">Speed Violation</div>
+                <div class="violation-detail">Ravi T. · 78 km/h · 2nd offense</div>
+              </div>
+              <span class="chip danger">PENALTY</span>
+            </div>
+            <div class="violation-item">
+              <div class="violation-icon helmet">⛑️</div>
+              <div class="violation-info">
+                <div class="violation-name">No Helmet</div>
+                <div class="violation-detail">Mohan L. · Detected 6:42 PM</div>
+              </div>
+              <span class="chip transit">WARNING</span>
+            </div>
+            <div class="violation-item">
+              <div class="violation-icon speed">📷</div>
+              <div class="violation-info">
+                <div class="violation-name">Camera Blocked</div>
+                <div class="violation-detail">Arjun K. · 30 sec blackout</div>
+              </div>
+              <span class="chip transit">REVIEW</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ADMIN ORDERS ===== -->
+    <div class="page" id="adminOrders">
+      <div class="topbar">
+        <div><div class="page-title">Orders Management</div><div class="page-subtitle">All orders · Live view</div></div>
+        <div class="topbar-right">
+          <div class="search-bar"><span style="color:var(--text3);">🔍</span><input placeholder="Search orders..."></div>
+          <button class="btn btn-primary">+ New Order</button>
+        </div>
+      </div>
+      <div class="content">
+        <div style="display:flex;gap:10px;margin-bottom:20px;">
+          <button class="btn btn-primary" style="font-size:11px;">All (247)</button>
+          <button class="btn btn-ghost" style="font-size:11px;">In Transit (12)</button>
+          <button class="btn btn-ghost" style="font-size:11px;">Pending (8)</button>
+          <button class="btn btn-ghost" style="font-size:11px;">Delivered (227)</button>
+        </div>
+        <div class="panel">
+          <table class="table">
+            <thead>
+              <tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Partner</th><th>Amount</th><th>Status</th><th>ETA</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="text-mono text-amber">#SR-2847</span></td><td>Ricky S.</td><td>Chicken Biryani Set</td><td>Arjun K.</td><td>₹380</td><td><span class="chip transit">In Transit</span></td><td><span class="text-mono">14 min</span></td></tr>
+              <tr><td><span class="text-mono text-amber">#SR-2848</span></td><td>Priya M.</td><td>Ice Cream Sundae</td><td>Rahul D.</td><td>₹195</td><td><span class="chip transit">In Transit</span></td><td><span class="text-mono">8 min</span></td></tr>
+              <tr><td><span class="text-mono text-amber">#SR-2846</span></td><td>Dev K.</td><td>Smash Burger Combo</td><td>Kiran P.</td><td>₹420</td><td><span class="chip pending">Pending</span></td><td><span class="text-mono">35 min</span></td></tr>
+              <tr><td><span class="text-mono text-amber">#SR-2845</span></td><td>Aarav S.</td><td>Pad Thai</td><td>Kiran P.</td><td>₹280</td><td><span class="chip delivered">Delivered</span></td><td><span class="text-mono">—</span></td></tr>
+              <tr><td><span class="text-mono text-amber">#SR-2844</span></td><td>Sneha R.</td><td>Pepperoni Pizza</td><td>Suresh V.</td><td>₹540</td><td><span class="chip delivered">Delivered</span></td><td><span class="text-mono">—</span></td></tr>
+              <tr><td><span class="text-mono text-amber">#SR-2843</span></td><td>Meera T.</td><td>Quinoa Bowl</td><td>Arjun K.</td><td>₹310</td><td><span class="chip delivered">Delivered</span></td><td><span class="text-mono">—</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ADMIN PARTNERS ===== -->
+    <div class="page" id="adminPartners">
+      <div class="topbar">
+        <div><div class="page-title">Delivery Partners</div><div class="page-subtitle">34 active · 12 offline</div></div>
+      </div>
+      <div class="content">
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Active Partners</div></div>
+            <div class="partner-row">
+              <div class="partner-avatar">🧑</div>
+              <div class="partner-info">
+                <div class="partner-name">Arjun Kumar</div>
+                <div class="partner-orders">4 orders · 3.2km away</div>
+              </div>
+              <div class="partner-score score-good">4.8</div>
+              <span class="chip transit">ACTIVE</span>
+            </div>
+            <div class="partner-row">
+              <div class="partner-avatar">👱</div>
+              <div class="partner-info">
+                <div class="partner-name">Rahul Desai</div>
+                <div class="partner-orders">2 orders · 1.8km away</div>
+              </div>
+              <div class="partner-score score-good">4.6</div>
+              <span class="chip transit">ACTIVE</span>
+            </div>
+            <div class="partner-row">
+              <div class="partner-avatar">👨</div>
+              <div class="partner-info">
+                <div class="partner-name">Kiran Patel</div>
+                <div class="partner-orders">3 orders · 5.1km away</div>
+              </div>
+              <div class="partner-score score-avg">3.9</div>
+              <span class="chip transit">ACTIVE</span>
+            </div>
+            <div class="partner-row">
+              <div class="partner-avatar">🧔</div>
+              <div class="partner-info">
+                <div class="partner-name">Ravi Teja</div>
+                <div class="partner-orders">1 order · 2.7km away</div>
+              </div>
+              <div class="partner-score score-bad">2.8</div>
+              <span class="chip danger">FLAGGED</span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Partner Safety Scores</div></div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:12px;">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Arjun Kumar</span><span style="color:var(--green);font-family:var(--font-mono);">98%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:98%;background:linear-gradient(90deg,var(--green),#16a34a);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Rahul Desai</span><span style="color:var(--green);font-family:var(--font-mono);">92%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:92%;background:linear-gradient(90deg,var(--green),#16a34a);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Kiran Patel</span><span style="color:var(--amber);font-family:var(--font-mono);">74%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:74%;"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Ravi Teja</span><span style="color:var(--red);font-family:var(--font-mono);">41%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:41%;background:linear-gradient(90deg,var(--red),#dc2626);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ADMIN VIOLATIONS ===== -->
+    <div class="page" id="adminViolations">
+      <div class="topbar">
+        <div><div class="page-title">Violations Center</div><div class="page-subtitle">Speed · Helmet · Camera violations</div></div>
+        <div class="topbar-right"><span class="chip danger">3 Today</span></div>
+      </div>
+      <div class="content">
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card red">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-value">2</div>
+            <div class="stat-label">Speed Violations</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-icon">⛑️</div>
+            <div class="stat-value">1</div>
+            <div class="stat-label">Helmet Violations</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-icon">📷</div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">Camera Violations</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">All Violations</div></div>
+          <table class="table">
+            <thead>
+              <tr><th>Partner</th><th>Type</th><th>Detail</th><th>Time</th><th>Offense #</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ravi Teja</strong></td>
+                <td>🚀 Speed</td>
+                <td>78 km/h (limit 60)</td>
+                <td class="text-mono">6:14 PM</td>
+                <td><span class="chip danger">2nd</span></td>
+                <td><button class="btn btn-danger" style="font-size:10px;padding:4px 10px;">Penalize</button></td>
+              </tr>
+              <tr>
+                <td><strong>Kiran Patel</strong></td>
+                <td>🚀 Speed</td>
+                <td>66 km/h (limit 60)</td>
+                <td class="text-mono">4:52 PM</td>
+                <td><span class="chip transit">1st</span></td>
+                <td><button class="btn btn-ghost" style="font-size:10px;padding:4px 10px;">Warn</button></td>
+              </tr>
+              <tr>
+                <td><strong>Mohan Lal</strong></td>
+                <td>⛑️ Helmet</td>
+                <td>Removed at signal</td>
+                <td class="text-mono">6:42 PM</td>
+                <td><span class="chip transit">1st</span></td>
+                <td><button class="btn btn-ghost" style="font-size:10px;padding:4px 10px;">Warn</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="notif-toast" id="toast" style="display:none;">
+  <div class="notif-icon" id="toastIcon">⚡</div>
+  <div>
+    <div class="notif-title" id="toastTitle">Notification</div>
+    <div class="notif-body" id="toastBody">Message</div>
+  </div>
+</div>
+
+<script>
+  let currentRole = 'customer';
+  let currentNavItems = [];
+
+  function doLogin() {
+    const role = document.getElementById('roleSelect').value;
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    switchRole(role);
+  }
+
+  function showRegister() {
+    showToast('📝', 'Register', 'Registration page coming soon!');
+  }
+
+  function switchRole(role) {
+    currentRole = role;
+    document.getElementById('customerNav').classList.add('hidden');
+    document.getElementById('deliveryNav').classList.add('hidden');
+    document.getElementById('adminNav').classList.add('hidden');
+    document.getElementById('tab-customer').classList.remove('active');
+    document.getElementById('tab-delivery').classList.remove('active');
+    document.getElementById('tab-admin').classList.remove('active');
+
+    if (role === 'customer') {
+      document.getElementById('customerNav').classList.remove('hidden');
+      document.getElementById('tab-customer').classList.add('active');
+      showPage('customerDashboard', null);
+    } else if (role === 'delivery') {
+      document.getElementById('deliveryNav').classList.remove('hidden');
+      document.getElementById('tab-delivery').classList.add('active');
+      showPage('deliveryDashboard', null);
+    } else {
+      document.getElementById('adminNav').classList.remove('hidden');
+      document.getElementById('tab-admin').classList.add('active');
+      showPage('adminDashboard', null);
+    }
+  }
+
+  function showPage(id, navEl) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (navEl) {
+      const nav = navEl.closest('[id$="Nav"]');
+      if (nav) nav.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      navEl.classList.add('active');
+    }
+  }
+
+  function simulateScan() {
+    document.getElementById('scanPlaceholder').style.display = 'none';
+    document.getElementById('scanResult').style.display = 'block';
+    showToast('🔓', 'QR Scanned!', 'Customer address unlocked successfully');
+  }
+
+  function setSpeed(speed) {
+    document.getElementById('speedVal').textContent = speed;
+    const arc = document.getElementById('speedArc');
+    const pct = Math.min(speed / 100, 1);
+    const offset = 377 - (377 * pct);
+    arc.style.strokeDashoffset = offset;
+    if (speed > 60) {
+      arc.classList.add('danger');
+      document.getElementById('speedVal').style.color = 'var(--red)';
+      showToast('🚨', 'Speed Alert!', `${speed} km/h — exceeds 60 km/h limit!`);
+    } else {
+      arc.classList.remove('danger');
+      document.getElementById('speedVal').style.color = 'var(--text)';
+    }
+  }
+
+  function showToast(icon, title, body) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastIcon').textContent = icon;
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastBody').textContent = body;
+    t.style.display = 'flex';
+    setTimeout(() => { t.style.display = 'none'; }, 3500);
+  }
+
+  // Simulate moving delivery pin
+  let pinX = 48, pinY = 54;
+  setInterval(() => {
+    pinX = Math.max(30, Math.min(65, pinX + (Math.random() - 0.4) * 1.5));
+    pinY = Math.max(38, Math.min(65, pinY - Math.random() * 0.8));
+    const pin = document.getElementById('deliveryPin');
+    const trackPin = document.getElementById('trackPin');
+    if (pin) pin.style.left = pinX + '%';
+    if (trackPin) { trackPin.style.left = (pinX - 5) + '%'; trackPin.style.top = pinY + '%'; }
+  }, 5000);
+
+  // ETA countdown
+  setInterval(() => {
+    const el = document.getElementById('etaCount');
+    if (el) {
+      const v = parseInt(el.textContent);
+      if (v > 1) el.textContent = v - 1;
+    }
+  }, 60000);
+</script>
+</body>
+</html>
