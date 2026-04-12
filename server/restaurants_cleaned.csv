@@ -1,0 +1,81 @@
+name,lat,lng,address,area,cuisine,rating,source
+Paradise Biriyani,17.409161,78.359912,"Jubilee Hills, Hyderabad",Jubilee Hills,biryani,N/A,generated
+KFC,17.456387,78.439806,"Banjara Hills, Hyderabad",Banjara Hills,burger,3.8,generated
+Pizza Hut,17.385384,78.427887,"Hi-Tech City, Hyderabad",Hi-Tech City,pizza,3.9,generated
+McDonald's,17.434896,78.410845,"Gachibowli, Hyderabad",Gachibowli,burger,3.7,generated
+Domino's Pizza,17.424443,78.47159,"Kondapur, Hyderabad",Kondapur,pizza,3.6,generated
+Burger King,17.4483,78.453006,"Madhapur, Hyderabad",Madhapur,burger,3.8,generated
+Subway,17.396797,78.456293,"SR Nagar, Hyderabad",SR Nagar,sandwich,3.9,generated
+Cream Stone,17.42327,78.35724,"Kukatpally, Hyderabad",Kukatpally,ice_cream,4.2,generated
+Barista,17.350848,78.414481,"Bachupally, Hyderabad",Bachupally,coffee_shop,3.5,generated
+Cafe Coffee Day,17.426768,78.446984,"Miyapur, Hyderabad",Miyapur,coffee_shop,3.4,generated
+Taj Falaknama Palace,17.460781,78.332755,"Koti, Hyderabad",Koti,fine_dining,4.7,generated
+Olive Garden,17.378551,78.371292,"Abids, Hyderabad",Abids,italian,4.1,generated
+Mainland China,17.410541,78.450611,"Secunderabad, Hyderabad",Secunderabad,chinese,4.0,generated
+Mamagoto,17.499826,78.391875,"Falaknuma, Hyderabad",Falaknuma,chinese,3.9,generated
+Pista House,17.482272,78.364806,"Charminar, Hyderabad",Charminar,biryani,4.0,generated
+Shah Ghouse Hotel,17.485196,78.430368,"Tolichowki, Hyderabad",Tolichowki,biryani,4.1,generated
+Nectar Kitchen & Bar,17.431036,78.311872,"Mehdipatnam, Hyderabad",Mehdipatnam,indian,4.3,generated
+Absolute Barbecues,17.506489,78.426872,"Langer Houz, Hyderabad",Langer Houz,indian,4.4,generated
+Karachi Cafe,17.378893,78.414248,"Attapur, Hyderabad",Attapur,south_indian,4.2,generated
+Imperial Multi-Cuisine,17.399057,78.367943,"Salar Jung Colony, Hyderabad",Salar Jung Colony,indian,3.8,generated
+Grameen Kangan,17.404928,78.355657,"Brabourne Road, Hyderabad",Brabourne Road,indian,3.6,generated
+Sizza,17.494072,78.344591,"Nampally, Hyderabad",Nampally,pizza,3.5,generated
+Fried Rice Center,17.353717,78.403581,"Shamshabad, Hyderabad",Shamshabad,chinese,3.4,generated
+Dhabha,17.403121,78.427599,"Lingampally, Hyderabad",Lingampally,indian,3.7,generated
+Amul Ice Cream Parlour,17.396599,78.383047,"Patancheru, Hyderabad",Patancheru,ice_cream,4.1,generated
+Hitech Bawarchi,17.408832,78.456814,"Jubilee Hills, Hyderabad",Jubilee Hills,indian,3.8,generated
+Universal Biryani Point,17.414923,78.415985,"Banjara Hills, Hyderabad",Banjara Hills,biryani,4.0,generated
+Blue Fox,17.465182,78.463947,"Hi-Tech City, Hyderabad",Hi-Tech City,fine_dining,4.2,generated
+Chili's American Grill,17.396749,78.457218,"Gachibowli, Hyderabad",Gachibowli,american,3.9,generated
+Itmenaan Biryani,17.44113,78.481619,"Kondapur, Hyderabad",Kondapur,biryani,4.3,generated
+The Biryani House,17.390387,78.480387,"Madhapur, Hyderabad",Madhapur,biryani,4.1,generated
+Meridian Restaurant,17.419495,78.45753,"SR Nagar, Hyderabad",SR Nagar,indian,3.7,generated
+Spice Khazana,17.51169,78.425728,"Kukatpally, Hyderabad",Kukatpally,indian,3.8,generated
+Delhi Dhaba,17.416184,78.354199,"Bachupally, Hyderabad",Bachupally,indian,3.5,generated
+Aromas of China,17.412415,78.415687,"Miyapur, Hyderabad",Miyapur,chinese,3.9,generated
+Tara Birista,17.379148,78.419036,"Koti, Hyderabad",Koti,biryani,4.0,generated
+Hyderabadi Dum Biryani,17.41404,78.345684,"Abids, Hyderabad",Abids,biryani,4.4,generated
+Lucky Restaurant,17.417695,78.396742,"Secunderabad, Hyderabad",Secunderabad,indian,3.6,generated
+Almond House,17.372868,78.433856,"Falaknuma, Hyderabad",Falaknuma,dessert,4.1,generated
+Sweet Magic,17.496191,78.351587,"Charminar, Hyderabad",Charminar,dessert,3.8,generated
+Haldiram's,17.482147,78.334473,"Tolichowki, Hyderabad",Tolichowki,indian,3.7,generated
+Namaste,17.443681,78.321058,"Mehdipatnam, Hyderabad",Mehdipatnam,south_indian,3.9,generated
+Mossk Coffee,17.361078,78.42623,"Langer Houz, Hyderabad",Langer Houz,coffee_shop,3.5,generated
+Starbucks,17.379099,78.397447,"Attapur, Hyderabad",Attapur,coffee_shop,3.8,generated
+Costa Coffee,17.448173,78.376607,"Salar Jung Colony, Hyderabad",Salar Jung Colony,coffee_shop,3.6,generated
+Chaayos,17.404919,78.478646,"Brabourne Road, Hyderabad",Brabourne Road,tea,3.7,generated
+Madhura Sweets,17.387393,78.416616,"Nampally, Hyderabad",Nampally,dessert,4.0,generated
+MTR,17.492022,78.461655,"Shamshabad, Hyderabad",Shamshabad,south_indian,4.2,generated
+Vellore Kitchen,17.359116,78.363156,"Lingampally, Hyderabad",Lingampally,south_indian,4.1,generated
+Chennai Kitchen,17.458085,78.367996,"Patancheru, Hyderabad",Patancheru,south_indian,4.0,generated
+A2B,17.459125,78.346921,"Jubilee Hills, Hyderabad",Jubilee Hills,south_indian,4.1,generated
+Kritunga,17.38861,78.400253,"Banjara Hills, Hyderabad",Banjara Hills,south_indian,3.8,generated
+爪子小笼包,17.416208,78.361121,"Hi-Tech City, Hyderabad",Hi-Tech City,chinese,4.0,generated
+Korean Restaurant,17.452761,78.386603,"Gachibowli, Hyderabad",Gachibowli,korean,3.9,generated
+Sushi Bay,17.506031,78.382794,"Kondapur, Hyderabad",Kondapur,sushi,4.1,generated
+Thai Street Food,17.376684,78.407234,"Madhapur, Hyderabad",Madhapur,thai,3.8,generated
+Mexican Loco,17.415826,78.375579,"SR Nagar, Hyderabad",SR Nagar,mexican,3.7,generated
+Spice Garden,17.40279,78.373897,"Kukatpally, Hyderabad",Kukatpally,indian,3.6,generated
+Royal China,17.488793,78.386027,"Bachupally, Hyderabad",Bachupally,chinese,4.1,generated
+Effingut Brewerkz,17.405727,78.424727,"Miyapur, Hyderabad",Miyapur,indian,4.2,generated
+The Fisherman's Wharf,17.461126,78.418865,"Koti, Hyderabad",Koti,seafood,4.3,generated
+Kashmir Grill,17.437495,78.348143,"Abids, Hyderabad",Abids,indian,3.9,generated
+Punjabi Grill,17.432911,78.356854,"Secunderabad, Hyderabad",Secunderabad,indian,3.8,generated
+Bawarchi Biryani,17.430465,78.351674,"Falaknuma, Hyderabad",Falaknuma,biryani,4.3,generated
+Café Eclare,17.462188,78.34901,"Charminar, Hyderabad",Charminar,coffee_shop,3.9,generated
+Gloria Jean's,17.428233,78.445546,"Tolichowki, Hyderabad",Tolichowki,coffee_shop,3.5,generated
+Taco Bell,17.458736,78.49105,"Mehdipatnam, Hyderabad",Mehdipatnam,mexican,3.6,generated
+Wow Momo,17.433832,78.428769,"Langer Houz, Hyderabad",Langer Houz,nepalese,3.8,generated
+Wendy's,17.367399,78.449167,"Attapur, Hyderabad",Attapur,burger,3.7,generated
+FreshMenu,17.511193,78.374107,"Salar Jung Colony, Hyderabad",Salar Jung Colony,indian,3.4,generated
+BOX8,17.474215,78.328928,"Brabourne Road, Hyderabad",Brabourne Road,indian,3.6,generated
+Food Bucket,17.462219,78.47464,"Nampally, Hyderabad",Nampally,indian,3.5,generated
+Zorkem,17.422007,78.403712,"Shamshabad, Hyderabad",Shamshabad,indian,3.8,generated
+Deccan Spice,17.386176,78.36582,"Lingampally, Hyderabad",Lingampally,indian,4.0,generated
+Paradise,17.425129,78.309194,"Patancheru, Hyderabad",Patancheru,biryani,4.2,generated
+Sagar Ratna,17.510519,78.393924,"Jubilee Hills, Hyderabad",Jubilee Hills,south_indian,4.1,generated
+Sagar,17.478651,78.358778,"Banjara Hills, Hyderabad",Banjara Hills,south_indian,4.0,generated
+Aditya,17.35929,78.413562,"Hi-Tech City, Hyderabad",Hi-Tech City,south_indian,3.9,generated
+Maharaja's,17.439135,78.359555,"Gachibowli, Hyderabad",Gachibowli,indian,4.1,generated
+The Yellow Chilli,17.41674,78.312334,"Kondapur, Hyderabad",Kondapur,indian,4.2,generated

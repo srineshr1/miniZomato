@@ -2,9 +2,10 @@ import asyncio
 import random
 import string
 from datetime import datetime, timezone
+from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
 from app.models.order import Order, OrderItem, OrderStatus
@@ -15,6 +16,8 @@ from app.schemas.order import OrderCreate, OrderOut, OrderStatusUpdate, OrderIte
 from app.routers.auth import get_current_user, require_role
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
+
+_order_auto_tasks: dict[int, asyncio.Task] = {}
 
 
 async def _emit_new_order(order: Order):
@@ -51,13 +54,161 @@ async def _emit_order_update(order_id: int, status: str, partner_id: int | None 
         print(f"[Socket] Failed to emit order_update: {e}")
 
 
+async def _emit_partner_location(order_id: int, partner_id: int, lat: float, lng: float):
+    from app.sio_server import sio
+    try:
+        await sio.emit('partner_location', {
+            'order_id': order_id,
+            'partner_id': partner_id,
+            'lat': lat,
+            'lng': lng,
+        }, room=f'order_{order_id}')
+    except Exception as e:
+        print(f"[Socket] Failed to emit partner_location: {e}")
+
+
+async def _simulate_partner_movement(
+    order_id: int,
+    partner_id: int,
+    customer_lat: float,
+    customer_lng: float,
+    restaurant_lat: float,
+    restaurant_lng: float,
+):
+    await _emit_partner_location(order_id, partner_id, restaurant_lat, restaurant_lng)
+    steps = 4
+    interval = 3
+    for i in range(steps):
+        progress = (i + 1) / steps
+        lat = restaurant_lat + (customer_lat - restaurant_lat) * progress
+        lng = restaurant_lng + (customer_lng - restaurant_lng) * progress
+        await _emit_partner_location(order_id, partner_id, lat, lng)
+        await asyncio.sleep(interval)
+    await _emit_partner_location(order_id, partner_id, customer_lat, customer_lng)
+
+
+@asynccontextmanager
+async def _progress_order(order_id: int, db: Session):
+    if order_id in _order_auto_tasks:
+        _order_auto_tasks[order_id].cancel()
+        try:
+            await _order_auto_tasks[order_id]
+        except asyncio.CancelledError:
+            pass
+
+    async def run():
+        try:
+            await _auto_progress_order(order_id, db)
+        except asyncio.CancelledError:
+            pass
+        except Exception as e:
+            print(f"[AutoOrder] Error progressing order {order_id}: {e}")
+        finally:
+            _order_auto_tasks.pop(order_id, None)
+
+    t = asyncio.create_task(run())
+    _order_auto_tasks[order_id] = t
+    try:
+        yield
+    finally:
+        t.cancel()
+        try:
+            await t
+        except asyncio.CancelledError:
+            pass
+
+
+async def _auto_progress_order(order_id: int, db: Session):
+    order = db.query(Order).options(joinedload(Order.items).joinedload(OrderItem.food_item)).filter(Order.id == order_id).first()
+    if not order:
+        return
+
+    order.status = OrderStatus.CONFIRMED
+    order.confirmed_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(order)
+    await _emit_order_update(order.id, order.status.value, order.partner_id)
+    await asyncio.sleep(12)
+
+    if order.status != OrderStatus.CONFIRMED:
+        return
+    order.status = OrderStatus.PREPARING
+    db.commit()
+    db.refresh(order)
+    await _emit_order_update(order.id, order.status.value, order.partner_id)
+    await asyncio.sleep(12)
+
+    if order.status != OrderStatus.PREPARING:
+        return
+    order.status = OrderStatus.READY
+    db.commit()
+    db.refresh(order)
+
+    partner = db.query(DeliveryPartner).filter(DeliveryPartner.status == PartnerStatus.AVAILABLE).first()
+    if partner:
+        order.partner_id = partner.id
+        partner.status = PartnerStatus.BUSY
+        db.commit()
+        db.refresh(order)
+
+    await _emit_order_update(order.id, order.status.value, order.partner_id)
+    await asyncio.sleep(12)
+
+    if order.status != OrderStatus.READY:
+        return
+    order.status = OrderStatus.PICKED_UP
+    order.picked_up_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(order)
+    await _emit_order_update(order.id, order.status.value, order.partner_id)
+
+    movement_task = None
+    if order.partner_id:
+        movement_task = asyncio.create_task(
+            _simulate_partner_movement(
+                order.id,
+                order.partner_id,
+                order.customer_lat or 17.4369,
+                order.customer_lng or 78.4001,
+                order.restaurant_lat or 17.4369,
+                order.restaurant_lng or 78.4001,
+            )
+        )
+
+    await asyncio.sleep(12)
+
+    if movement_task:
+        try:
+            await movement_task
+        except asyncio.CancelledError:
+            pass
+
+    if order.status != OrderStatus.PICKED_UP:
+        return
+    order.status = OrderStatus.IN_TRANSIT
+    db.commit()
+    db.refresh(order)
+    await _emit_order_update(order.id, order.status.value, order.partner_id)
+    await asyncio.sleep(15)
+
+    if order.status != OrderStatus.IN_TRANSIT:
+        return
+    order.status = OrderStatus.DELIVERED
+    order.delivered_at = datetime.now(timezone.utc)
+    if order.partner:
+        order.partner.status = PartnerStatus.AVAILABLE
+    db.commit()
+    db.refresh(order)
+    await _emit_order_update(order.id, order.status.value, order.partner_id)
+
+
 def generate_order_number() -> str:
     num = "".join(random.choices(string.digits, k=4))
     return f"SR-{num}"
 
 
 @router.post("/", response_model=OrderOut, status_code=201)
-def create_order(
+async def create_order(
     data: OrderCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role(UserRole.CUSTOMER)),
@@ -116,6 +267,10 @@ def create_order(
     db.refresh(order)
 
     asyncio.create_task(_emit_new_order(order))
+
+    async with _progress_order(order.id, db):
+        pass
+
     return order
 
 
@@ -141,7 +296,7 @@ def list_orders(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    q = db.query(Order)
+    q = db.query(Order).options(joinedload(Order.items).joinedload(OrderItem.food_item))
     if current_user.role == UserRole.CUSTOMER:
         q = q.filter(Order.customer_id == current_user.id)
     elif current_user.role == UserRole.DELIVERY:
@@ -201,6 +356,10 @@ def update_order_status(
             order.partner_id = partner.id
             partner.total_deliveries += 1
 
+    if order.id in _order_auto_tasks:
+        _order_auto_tasks[order.id].cancel()
+        del _order_auto_tasks[order.id]
+
     db.commit()
     db.refresh(order)
     asyncio.create_task(_emit_order_update(order.id, order.status.value, order.partner_id))
@@ -229,6 +388,10 @@ def accept_order(
     order.status = OrderStatus.CONFIRMED
     order.confirmed_at = datetime.now(timezone.utc)
     partner.status = PartnerStatus.BUSY
+
+    if order.id in _order_auto_tasks:
+        _order_auto_tasks[order.id].cancel()
+        del _order_auto_tasks[order.id]
 
     db.commit()
     db.refresh(order)

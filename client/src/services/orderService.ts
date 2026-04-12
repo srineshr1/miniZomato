@@ -4,7 +4,7 @@ import { Order, OrderStatus } from '../types';
 export const orderService = {
   async create(orderData: {
     items: { food_item_id: number; quantity: number }[];
-    customer_address: string;
+    customer_address?: string;
     customer_landmark?: string;
     customer_lat?: number;
     customer_lng?: number;

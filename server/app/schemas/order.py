@@ -22,7 +22,7 @@ class OrderItemOut(BaseModel):
 
 class OrderCreate(BaseModel):
     items: list[OrderItemCreate]
-    customer_address: str
+    customer_address: str | None = None
     customer_landmark: str | None = None
     customer_lat: float | None = None
     customer_lng: float | None = None

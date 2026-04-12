@@ -150,7 +150,7 @@ async def lifespan(app: FastAPI):
     import math
     AREA_CENTER_LAT = 17.4369
     AREA_CENTER_LNG = 78.4001
-    AREA_RADIUS_KM = 5
+    AREA_RADIUS_KM = 10
     EARTH_RADIUS_M = 6371000
 
     def in_zone(lat: float, lng: float) -> bool:

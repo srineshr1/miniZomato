@@ -54,8 +54,6 @@ export default function OrderFood() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [ordering, setOrdering] = useState(false);
-  const [customerAddress, setCustomerAddress] = useState('');
-  const [customerLandmark, setCustomerLandmark] = useState('');
   const [orderError, setOrderError] = useState('');
   const [userLocation, setUserLocation] = useState<GeoPoint | null>(null);
   const { addItem, count, items: cartItems, clearCart, total, updateQuantity } = useCart();
@@ -168,9 +166,8 @@ export default function OrderFood() {
 
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) return;
-    if (!customerAddress.trim()) {
-      setOrderError('Please enter your delivery address before placing the order.');
-      cartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!userLocation) {
+      setOrderError('Please select a delivery location before placing your order.');
       return;
     }
     setOrdering(true);
@@ -178,10 +175,8 @@ export default function OrderFood() {
     try {
       await orderService.create({
         items: cartItems.map((ci) => ({ food_item_id: ci.food_item.id, quantity: ci.quantity })),
-        customer_address: customerAddress.trim(),
-        customer_landmark: customerLandmark.trim() || undefined,
-        customer_lat: userLocation?.lat,
-        customer_lng: userLocation?.lng,
+        customer_lat: userLocation.lat,
+        customer_lng: userLocation.lng,
       });
       clearCart();
       navigate('/customer/track');
@@ -416,27 +411,6 @@ export default function OrderFood() {
                       </div>
                     </div>
                   ))}
-                </div>
-
-                <div className="customer-cart-form">
-                  <div className="field">
-                    <label>Delivery Address</label>
-                    <input
-                      type="text"
-                      placeholder="Flat/House, Street, Area, City"
-                      value={customerAddress}
-                      onChange={(e) => setCustomerAddress(e.target.value)}
-                    />
-                  </div>
-                  <div className="field">
-                    <label>Landmark (optional)</label>
-                    <input
-                      type="text"
-                      placeholder="Near metro station, mall, etc"
-                      value={customerLandmark}
-                      onChange={(e) => setCustomerLandmark(e.target.value)}
-                    />
-                  </div>
                 </div>
 
                 {orderError && <div className="customer-order-error">{orderError}</div>}
