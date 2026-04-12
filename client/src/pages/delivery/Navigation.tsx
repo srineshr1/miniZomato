@@ -431,247 +431,255 @@ export default function Navigation() {
 
   return (
     <>
-      <TopBar title="Navigation" subtitle={`${selectedOrderIds.length} selected stop${selectedOrderIds.length === 1 ? '' : 's'} · max 4`}>
-        <div className={`status-pill ${isConnected ? 'online' : 'warning'}`}>
-          <div className="dot" /> {isConnected ? 'Connected' : 'Reconnecting'}
-        </div>
-      </TopBar>
+      {/* Full-screen map */}
+      <div className="map-container nav-fullscreen">
+        <MapContainer
+          center={partnerPoint ? [partnerPoint.lat, partnerPoint.lng] : [17.4369, 78.4001]}
+          zoom={13}
+          className="map-real"
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
 
-      <div className="content">
-        <div className="travel-controls-bar">
-          <div className="travel-speed-control">
-            <label>Speed: <strong>{travelSpeed} km/h</strong></label>
-            <input
-              type="range"
-              min="10"
-              max="80"
-              value={travelSpeed}
-              onChange={(e) => setTravelSpeed(Number(e.target.value))}
-              disabled={isTravelling}
-            />
-          </div>
-          <div className="travel-actions">
-            {!isTravelling ? (
-              <button
-                className="btn btn-primary"
-                onClick={() => void startTravel()}
-                disabled={loadingTravel || !routeStops.length}
+          {partnerPoint && !isTravelling && (
+            <Marker
+              position={[partnerPoint.lat, partnerPoint.lng]}
+              icon={createPartnerIcon('online')}
+            >
+              <Popup>You are here</Popup>
+            </Marker>
+          )}
+
+          {travellingMarkerPos && isTravelling && (
+            <Marker
+              position={[travellingMarkerPos.lat, travellingMarkerPos.lng]}
+              icon={createPartnerIcon('busy')}
+            >
+              <Popup>🛵 Traveling at {travelSpeed} km/h</Popup>
+            </Marker>
+          )}
+
+          {routeStops.map((stop) =>
+            stop.lat != null && stop.lng != null ? (
+              <Marker
+                key={stop.order_id}
+                position={[stop.lat, stop.lng]}
+                icon={stop.stop_type === 'pickup' ? createRestaurantIcon() : createCustomerIcon()}
               >
-                {loadingTravel ? 'Loading route...' : 'Start Delivery'}
-              </button>
-            ) : (
-              <button className="btn btn-ghost" onClick={stopTravel}>
-                Stop
+                <Popup>
+                  #{stop.order_number} - {stop.food_name}
+                </Popup>
+              </Marker>
+            ) : null,
+          )}
+
+          {routeLine.length >= 2 && (
+            <Polyline
+              positions={routeLine}
+              pathOptions={{ color: isTravelling ? '#3b82f6' : '#22c55e', weight: 3 }}
+            />
+          )}
+        </MapContainer>
+      </div>
+
+      {/* TopBar overlay */}
+      <div className="nav-overlay nav-overlay-topbar">
+        <TopBar
+          title="Navigation"
+          subtitle={`${selectedOrderIds.length} stop${selectedOrderIds.length === 1 ? '' : 's'} · max 4 · click map to select`}
+        >
+          <div className={`status-pill ${isConnected ? 'online' : 'warning'}`}>
+            <div className="dot" /> {isConnected ? 'Connected' : 'Reconnecting'}
+          </div>
+        </TopBar>
+      </div>
+
+      {/* Route Builder - bottom left */}
+      <div className="nav-overlay nav-overlay-left">
+        <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>ROUTE BUILDER · UP TO 4 ORDERS</div>
+          {activeOrders.length === 0 ? (
+            <div style={{ color: 'var(--text2)', fontSize: 12 }}>No active orders assigned.</div>
+          ) : (
+            activeOrders.map((order) => {
+              const checked = selectedOrderIds.includes(order.id);
+              const disabled = !checked && selectedOrderIds.length >= 4;
+              const pickupPending = ['confirmed', 'preparing', 'ready'].includes(order.status);
+              return (
+                <label
+                  key={order.id}
+                  className={`turn-item ${checked ? 'active' : 'normal'}`}
+                  style={{ cursor: disabled || isTravelling ? 'not-allowed' : 'pointer', opacity: disabled || isTravelling ? 0.5 : 1 }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    disabled={disabled || isTravelling}
+                    onChange={() => toggleOrder(order.id)}
+                  />
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 12 }}>
+                      #{order.order_number} · {order.items?.[0]?.food_item_name || 'Order'}
+                    </div>
+                    <div style={{ fontSize: 10, color: 'var(--text3)', fontFamily: 'var(--font-mono)' }}>
+                      {pickupPending ? 'Pickup pending' : 'Delivering'} · {statusLabel(order.status)}
+                    </div>
+                  </div>
+                </label>
+              );
+            })
+          )}
+
+          <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+            <button className="btn btn-ghost" style={{ fontSize: 11, padding: '6px 10px' }} onClick={() => void syncCurrentLocation()} disabled={isTravelling}>
+              📍 Sync
+            </button>
+            <button
+              className="btn btn-primary"
+              style={{ fontSize: 11, padding: '6px 10px', flex: 1 }}
+              onClick={() => void buildRoute()}
+              disabled={loadingRoute || selectedOrderIds.length === 0 || isTravelling}
+            >
+              {loadingRoute ? 'Optimizing...' : '🗺️ Optimize Route'}
+            </button>
+          </div>
+          {routeError && <div style={{ color: 'var(--red)', fontSize: 11 }}>{routeError}</div>}
+        </div>
+      </div>
+
+      {/* Delivery Sequence - top right */}
+      <div className="nav-overlay nav-overlay-right-top">
+        <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontSize: 10, color: 'var(--text3)', marginBottom: 4 }}>DELIVERY SEQUENCE · {routeMeta?.algorithm || 'NO ROUTE'}</div>
+          {routeStops.length === 0 ? (
+            <div style={{ color: 'var(--text2)', fontSize: 12 }}>Optimize route to view stops.</div>
+          ) : (
+            routeStops.map((stop, index) => {
+              const order = activeOrders.find((o) => o.id === stop.order_id);
+              return (
+                <div
+                  key={stop.order_id}
+                  className={`route-step ${stop.priority === 1 ? 'priority-1' : stop.priority === 2 ? 'priority-2' : 'priority-3'}`}
+                >
+                  <div className={`route-num ${index === 0 ? 'n1' : index === 1 ? 'n2' : index === 2 ? 'n3' : 'n4'}`}>
+                    {index + 1}
+                  </div>
+                  <div className="route-food-emoji">{stop.stop_type === 'pickup' ? '🏪' : stop.food_emoji}</div>
+                  <div className="route-info">
+                    <div className="route-customer">#{stop.order_number} · {stop.food_name}</div>
+                    <div className="route-reason">
+                      {stop.stop_type === 'pickup'
+                        ? `Pickup · ${stop.distance_km} km`
+                        : stop.priority_reason || `${stop.distance_km} km`}
+                    </div>
+                    {order && (
+                      <button
+                        className="btn btn-ghost"
+                        style={{ marginTop: 6, padding: '4px 8px', fontSize: 10 }}
+                        disabled={!actionEnabled(order.status) || statusLoadingOrderId === order.id}
+                        onClick={() => void runStatusAction(order)}
+                      >
+                        {statusLoadingOrderId === order.id ? '...' : actionLabel(order.status)}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {/* Route Stats - bottom right */}
+      <div className="nav-overlay nav-overlay-right-bottom">
+        <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ fontSize: 10, color: 'var(--text3)', marginBottom: 2 }}>ROUTE STATS</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+            <span style={{ color: 'var(--text2)' }}>Distance</span>
+            <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--amber)' }}>
+              {routeMeta ? `${routeMeta.totalDistance.toFixed(1)} km` : '—'}
+            </span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+            <span style={{ color: 'var(--text2)' }}>Duration</span>
+            <span style={{ fontFamily: 'var(--font-mono)' }}>{routeMeta ? `${routeMeta.eta} min` : '—'}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+            <span style={{ color: 'var(--text2)' }}>Speed</span>
+            <span style={{ fontFamily: 'var(--font-mono)', color: isTravelling ? '#3b82f6' : 'var(--text3)' }}>
+              {isTravelling ? `${travelSpeed} km/h` : '—'}
+            </span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+            <span style={{ color: 'var(--text2)' }}>Stops</span>
+            <span style={{ fontFamily: 'var(--font-mono)' }}>{routeStops.length}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom bar: speed + start/stop */}
+      <div className="nav-overlay nav-overlay-bottombar">
+        <div className="travel-speed-control">
+          <label>Speed <strong>{travelSpeed} km/h</strong></label>
+          <input
+            type="range"
+            min="10"
+            max="80"
+            value={travelSpeed}
+            onChange={(e) => setTravelSpeed(Number(e.target.value))}
+            disabled={isTravelling}
+          />
+        </div>
+        <div className="travel-actions">
+          {!isTravelling ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => void startTravel()}
+              disabled={loadingTravel || !routeStops.length}
+            >
+              {loadingTravel ? 'Loading...' : '▶ Start Delivery'}
+            </button>
+          ) : (
+            <button className="btn btn-ghost" onClick={stopTravel}>
+              ⏹ Stop
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Arrival banner - centered over map */}
+      {arrivedAtStop && currentOrder && (
+        <div className="nav-arrival">
+          <div className="nav-arrival-icon">
+            {arrivedAtStop === 'restaurant' ? '🏪' : '🏠'}
+          </div>
+          <div className="nav-arrival-text">
+            <strong>{arrivedAtStop === 'restaurant' ? 'Arrived at Restaurant' : 'Arrived at Customer'}</strong>
+            <span>{currentOrder.items?.[0]?.food_item_name || `Order #${currentOrder.order_number}`}</span>
+          </div>
+          <div className="nav-arrival-buttons">
+            {arrivedAtStop === 'restaurant' && (
+              <>
+                <button className="btn btn-primary" onClick={handleTakeOrder}>
+                  🚶 Take
+                </button>
+                {showDeliverButton && (
+                  <button className="btn btn-green" onClick={handleDeliverIt}>
+                    🚚 Deliver
+                  </button>
+                )}
+              </>
+            )}
+            {arrivedAtStop === 'customer' && (
+              <button className="btn btn-green" onClick={handleMarkDelivered}>
+                ✓ Done
               </button>
             )}
           </div>
         </div>
-
-        {arrivedAtStop && currentOrder && (
-          <div className="arrival-banner">
-            <div className="arrival-banner-icon">
-              {arrivedAtStop === 'restaurant' ? '🏪' : '🏠'}
-            </div>
-            <div className="arrival-banner-text">
-              <strong>{arrivedAtStop === 'restaurant' ? 'Arrived at Restaurant' : 'Arrived at Customer'}</strong>
-              <span>{currentOrder.items?.[0]?.food_item_name || `Order #${currentOrder.order_number}`}</span>
-            </div>
-            <div className="arrival-banner-buttons">
-              {arrivedAtStop === 'restaurant' && (
-                <>
-                  <button className="btn btn-primary" onClick={handleTakeOrder}>
-                    🚶 Take Order
-                  </button>
-                  {showDeliverButton && (
-                    <button className="btn btn-green" onClick={handleDeliverIt}>
-                      🚚 Deliver It
-                    </button>
-                  )}
-                </>
-              )}
-              {arrivedAtStop === 'customer' && (
-                <button className="btn btn-green" onClick={handleMarkDelivered}>
-                  ✓ Mark Delivered
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="three-col">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <div className="map-container" style={{ height: 320 }}>
-              <MapContainer
-                center={partnerPoint ? [partnerPoint.lat, partnerPoint.lng] : [17.4369, 78.4001]}
-                zoom={13}
-                className="map-real"
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-
-                {partnerPoint && !isTravelling && (
-                  <Marker
-                    position={[partnerPoint.lat, partnerPoint.lng]}
-                    icon={createPartnerIcon('online')}
-                  >
-                    <Popup>You are here</Popup>
-                  </Marker>
-                )}
-
-                {travellingMarkerPos && isTravelling && (
-                  <Marker
-                    position={[travellingMarkerPos.lat, travellingMarkerPos.lng]}
-                    icon={createPartnerIcon('busy')}
-                  >
-                    <Popup>🛵 Traveling at {travelSpeed} km/h</Popup>
-                  </Marker>
-                )}
-
-                {routeStops.map((stop) =>
-                  stop.lat != null && stop.lng != null ? (
-                    <Marker
-                      key={stop.order_id}
-                      position={[stop.lat, stop.lng]}
-                      icon={stop.stop_type === 'pickup' ? createRestaurantIcon() : createCustomerIcon()}
-                    >
-                      <Popup>
-                        #{stop.order_number} - {stop.food_name}
-                      </Popup>
-                    </Marker>
-                  ) : null,
-                )}
-
-                {routeLine.length >= 2 && (
-                  <Polyline
-                    positions={routeLine}
-                    pathOptions={{ color: isTravelling ? '#3b82f6' : '#22c55e', weight: 3 }}
-                  />
-                )}
-              </MapContainer>
-            </div>
-
-            <Panel title="Route Builder" action={<div style={{ fontSize: 11, color: 'var(--text3)' }}>Up to 4 orders</div>}>
-              <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {activeOrders.length === 0 ? (
-                  <div style={{ color: 'var(--text2)', fontSize: 13 }}>No active orders assigned.</div>
-                ) : (
-                  activeOrders.map((order) => {
-                    const checked = selectedOrderIds.includes(order.id);
-                    const disabled = !checked && selectedOrderIds.length >= 4;
-                    const pickupPending = ['confirmed', 'preparing', 'ready'].includes(order.status);
-                    return (
-                      <label
-                        key={order.id}
-                        className={`turn-item ${checked ? 'active' : 'normal'}`}
-                        style={{ cursor: disabled || isTravelling ? 'not-allowed' : 'pointer', opacity: disabled || isTravelling ? 0.5 : 1 }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          disabled={disabled || isTravelling}
-                          onChange={() => toggleOrder(order.id)}
-                        />
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: 13 }}>
-                            #{order.order_number} · {order.items?.[0]?.food_item_name || 'Order'}
-                          </div>
-                          <div style={{ fontSize: 11, color: 'var(--text3)', fontFamily: 'var(--font-mono)' }}>
-                            {pickupPending ? 'Pickup pending' : 'Delivering'} · {statusLabel(order.status)}
-                          </div>
-                        </div>
-                      </label>
-                    );
-                  })
-                )}
-
-                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                  <button className="btn btn-ghost" onClick={() => void syncCurrentLocation()} disabled={isTravelling}>
-                    Sync Location
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => void buildRoute()}
-                    disabled={loadingRoute || selectedOrderIds.length === 0 || isTravelling}
-                  >
-                    {loadingRoute ? 'Optimizing...' : 'Optimize Route'}
-                  </button>
-                </div>
-                {routeError && <div style={{ color: 'var(--red)', fontSize: 12 }}>{routeError}</div>}
-              </div>
-            </Panel>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <Panel title="Delivery Sequence" action={<div style={{ fontSize: 10, color: 'var(--text3)', fontFamily: 'var(--font-mono)' }}>{routeMeta?.algorithm || 'NO ROUTE'}</div>}>
-              <div className="route-sequence">
-                {routeStops.length === 0 ? (
-                  <div style={{ color: 'var(--text2)', fontSize: 13 }}>Optimize route to view sequence.</div>
-                ) : (
-                  routeStops.map((stop, index) => {
-                    const order = activeOrders.find((o) => o.id === stop.order_id);
-                    return (
-                      <div
-                        key={stop.order_id}
-                        className={`route-step ${stop.priority === 1 ? 'priority-1' : stop.priority === 2 ? 'priority-2' : 'priority-3'}`}
-                      >
-                        <div className={`route-num ${index === 0 ? 'n1' : index === 1 ? 'n2' : index === 2 ? 'n3' : 'n4'}`}>
-                          {index + 1}
-                        </div>
-                        <div className="route-food-emoji">{stop.stop_type === 'pickup' ? '🏪' : stop.food_emoji}</div>
-                        <div className="route-info">
-                          <div className="route-customer">#{stop.order_number} · {stop.food_name}</div>
-                          <div className="route-reason">
-                            {stop.stop_type === 'pickup'
-                              ? `Pickup at restaurant · ${stop.distance_km} km`
-                              : stop.priority_reason || `${stop.distance_km} km`}
-                          </div>
-                          {order && (
-                            <button
-                              className="btn btn-ghost"
-                              style={{ marginTop: 8, padding: '6px 10px', fontSize: 11 }}
-                              disabled={!actionEnabled(order.status) || statusLoadingOrderId === order.id}
-                              onClick={() => void runStatusAction(order)}
-                            >
-                              {statusLoadingOrderId === order.id ? 'Updating...' : actionLabel(order.status)}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </Panel>
-
-            <Panel title="Route Stats">
-              <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                  <span style={{ color: 'var(--text2)' }}>Total Distance</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--amber)' }}>
-                    {routeMeta ? `${routeMeta.totalDistance.toFixed(1)} km` : '—'}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                  <span style={{ color: 'var(--text2)' }}>Estimated Duration</span>
-                  <span style={{ fontFamily: 'var(--font-mono)' }}>{routeMeta ? `${routeMeta.eta} min` : '—'}</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                  <span style={{ color: 'var(--text2)' }}>Current Speed</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: isTravelling ? '#3b82f6' : 'var(--text3)' }}>
-                    {isTravelling ? `${travelSpeed} km/h` : '—'}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                  <span style={{ color: 'var(--text2)' }}>Algorithm</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text3)' }}>{routeMeta?.algorithm || '—'}</span>
-                </div>
-              </div>
-            </Panel>
-          </div>
-        </div>
-      </div>
+      )}
     </>
   );
 }
