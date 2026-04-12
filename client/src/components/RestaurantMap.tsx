@@ -1,5 +1,6 @@
-import { CircleMarker, MapContainer, Polyline, Popup, TileLayer, useMapEvents } from 'react-leaflet';
-import { useEffect, useMemo } from 'react';
+import { MapContainer, Marker, Polyline, Popup, TileLayer, useMapEvents } from 'react-leaflet';
+import { createRestaurantIcon, createCustomerIcon } from '../utils/mapIcons';
+import { useMemo } from 'react';
 import { Restaurant } from '../data/restaurants';
 import { GeoPoint, buildRadiusRing } from '../utils/fleetSimulation';
 
@@ -15,9 +16,6 @@ interface RestaurantMapProps {
   zoneCenter?: GeoPoint;
   zoneRadiusKm?: number;
 }
-
-const RESTAURANT_COLOR = '#6366f1';
-const USER_COLOR = '#22c55e';
 
 function LocationSelector({ onLocationSelect }: { onLocationSelect: (p: GeoPoint) => void }) {
   useMapEvents({
@@ -65,15 +63,10 @@ export default function RestaurantMap({
         )}
 
         {restaurants.map((restaurant) => (
-          <CircleMarker
+          <Marker
             key={restaurant.id}
-            center={[restaurant.lat, restaurant.lng]}
-            radius={6}
-            pathOptions={{
-              color: RESTAURANT_COLOR,
-              weight: 2,
-              fillOpacity: 0.8,
-            }}
+            position={[restaurant.lat, restaurant.lng]}
+            icon={createRestaurantIcon()}
           >
             <Popup>
               <strong>{restaurant.name}</strong>
@@ -82,34 +75,29 @@ export default function RestaurantMap({
               <br />
               <span style={{ fontSize: 11 }}>{restaurant.address}</span>
             </Popup>
-          </CircleMarker>
+          </Marker>
         ))}
 
         {userLocation && (
-          <CircleMarker
-            center={[userLocation.lat, userLocation.lng]}
-            radius={8}
-            pathOptions={{
-              color: USER_COLOR,
-              weight: 3,
-              fillOpacity: 0.9,
-            }}
+          <Marker
+            position={[userLocation.lat, userLocation.lng]}
+            icon={createCustomerIcon()}
           >
             <Popup>
               <strong>Your Location</strong>
             </Popup>
-          </CircleMarker>
+          </Marker>
         )}
       </MapContainer>
 
       {showLegend && (
         <div className="fleet-map-legend">
           <div>
-            <span className="fleet-dot" style={{ background: RESTAURANT_COLOR }} /> Restaurant
+            <span className="fleet-dot" style={{ background: '#f59e0b' }} /> Restaurant
           </div>
           {userLocation && (
             <div>
-              <span className="fleet-dot" style={{ background: USER_COLOR }} /> Your Location
+              <span className="fleet-dot" style={{ background: '#22c55e' }} /> Your Location
             </div>
           )}
           {showDeliveryZone && (

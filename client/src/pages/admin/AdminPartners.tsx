@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CircleMarker, MapContainer, Polyline, Popup, TileLayer } from 'react-leaflet';
+import { Marker, MapContainer, Polyline, Popup, TileLayer } from 'react-leaflet';
+import { createPartnerIcon, createRestaurantIcon } from '../../utils/mapIcons';
 import TopBar from '../../components/TopBar';
 import Panel from '../../components/Panel';
 import { restaurants } from '../../data/restaurants';
@@ -456,15 +457,10 @@ export default function AdminPartners() {
                   if (!partner.current) return null;
 
                   return (
-                    <CircleMarker
+                    <Marker
                       key={partner.id}
-                      center={[partner.current.lat, partner.current.lng]}
-                      radius={7}
-                      pathOptions={{
-                        color: partner.status === 'offline' ? '#ef4444' : partner.status === 'busy' ? '#f5a623' : '#22c55e',
-                        weight: 2,
-                        fillOpacity: 0.95,
-                      }}
+                      position={[partner.current.lat, partner.current.lng]}
+                      icon={createPartnerIcon(partner.status as 'online' | 'busy' | 'offline')}
                     >
                       <Popup>
                         <strong>{partner.name}</strong>
@@ -473,20 +469,15 @@ export default function AdminPartners() {
                         <br />
                         {partner.distanceRemainingKm > 0 ? `${partner.distanceRemainingKm.toFixed(1)} km to next waypoint` : 'Getting next route'}
                       </Popup>
-                    </CircleMarker>
+                    </Marker>
                   );
                 })}
 
                 {showRestaurants && restaurants.map((restaurant) => (
-                  <CircleMarker
+                  <Marker
                     key={`rest-${restaurant.id}`}
-                    center={[restaurant.lat, restaurant.lng]}
-                    radius={5}
-                    pathOptions={{
-                      color: '#6366f1',
-                      weight: 2,
-                      fillOpacity: 0.7,
-                    }}
+                    position={[restaurant.lat, restaurant.lng]}
+                    icon={createRestaurantIcon()}
                   >
                     <Popup>
                       <strong>{restaurant.name}</strong>
@@ -495,7 +486,7 @@ export default function AdminPartners() {
                       <br />
                       <span style={{ fontSize: 11 }}>{restaurant.address}</span>
                     </Popup>
-                  </CircleMarker>
+                  </Marker>
                 ))}
               </MapContainer>
 

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { CircleMarker, MapContainer, Polyline, Popup, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from 'react-leaflet';
+import { createRestaurantIcon, createCustomerIcon, createPartnerIcon } from '../utils/mapIcons';
 
 interface GeoPoint {
   lat: number;
@@ -46,19 +47,19 @@ export default function OrderLiveMap({ customer, restaurant, partner, height = 3
         <FitBounds points={points} />
 
         {restaurant && (
-          <CircleMarker center={[restaurant.lat, restaurant.lng]} radius={8} pathOptions={{ color: '#3b82f6', weight: 2, fillOpacity: 0.9 }}>
+          <Marker position={[restaurant.lat, restaurant.lng]} icon={createRestaurantIcon()}>
             <Popup>Restaurant pickup location</Popup>
-          </CircleMarker>
+          </Marker>
         )}
 
-        <CircleMarker center={[customer.lat, customer.lng]} radius={8} pathOptions={{ color: '#22c55e', weight: 2, fillOpacity: 0.9 }}>
+        <Marker position={[customer.lat, customer.lng]} icon={createCustomerIcon()}>
           <Popup>Delivery destination</Popup>
-        </CircleMarker>
+        </Marker>
 
         {partner && (
-          <CircleMarker center={[partner.lat, partner.lng]} radius={8} pathOptions={{ color: '#f5a623', weight: 2, fillOpacity: 0.95 }}>
+          <Marker position={[partner.lat, partner.lng]} icon={createPartnerIcon('busy')}>
             <Popup>Delivery partner live position</Popup>
-          </CircleMarker>
+          </Marker>
         )}
 
         {restaurant && partner && (

@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import TopBar from '../../components/TopBar';
 import Timeline from '../../components/Timeline';
 import Chip from '../../components/Chip';
-import { MapContainer, TileLayer, CircleMarker, Polyline, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
+import { createRestaurantIcon, createCustomerIcon, createPartnerIcon } from '../../utils/mapIcons';
 import { orderService } from '../../services/orderService';
 import { usePolling } from '../../hooks/usePolling';
 import { useSocket } from '../../contexts/SocketContext';
@@ -34,8 +35,6 @@ function statusChip(status: Order['status']) {
   }
 }
 
-const AREA_CENTER = { lat: 17.4369, lng: 78.4001 };
-
 export default function TrackOrder() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
@@ -49,6 +48,7 @@ export default function TrackOrder() {
 
   useEffect(() => {
     if (!orderUpdate) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOrders((prev) =>
       prev
         .map((o) =>
@@ -165,30 +165,27 @@ export default function TrackOrder() {
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     {activeOrder.restaurant_lat && activeOrder.restaurant_lng && (
-                      <CircleMarker
-                        center={[activeOrder.restaurant_lat, activeOrder.restaurant_lng]}
-                        radius={8}
-                        pathOptions={{ color: '#f5a623', fillOpacity: 0.9, weight: 2 }}
+                      <Marker
+                        position={[activeOrder.restaurant_lat, activeOrder.restaurant_lng]}
+                        icon={createRestaurantIcon()}
                       >
                         <Popup>Restaurant</Popup>
-                      </CircleMarker>
+                      </Marker>
                     )}
                     {activeOrder.customer_lat && activeOrder.customer_lng && (
-                      <CircleMarker
-                        center={[activeOrder.customer_lat, activeOrder.customer_lng]}
-                        radius={8}
-                        pathOptions={{ color: '#22c55e', fillOpacity: 0.9, weight: 2 }}
+                      <Marker
+                        position={[activeOrder.customer_lat, activeOrder.customer_lng]}
+                        icon={createCustomerIcon()}
                       >
                         <Popup>Your Location</Popup>
-                      </CircleMarker>
+                      </Marker>
                     )}
-                    <CircleMarker
-                      center={[livePartnerPoint.lat, livePartnerPoint.lng]}
-                      radius={10}
-                      pathOptions={{ color: '#3b82f6', fillOpacity: 1, weight: 3 }}
+                    <Marker
+                      position={[livePartnerPoint.lat, livePartnerPoint.lng]}
+                      icon={createPartnerIcon('busy')}
                     >
                       <Popup>Delivery Partner</Popup>
-                    </CircleMarker>
+                    </Marker>
                     {activeOrder.restaurant_lat && activeOrder.restaurant_lng && (
                       <Polyline
                         positions={[

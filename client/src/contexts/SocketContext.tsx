@@ -33,7 +33,9 @@ const SocketContext = createContext<SocketContextType | null>(null);
 
 function playNotificationSound() {
   try {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const win = window as typeof window & { webkitAudioContext?: typeof AudioContext };
+    const AudioCtx = window.AudioContext || win.webkitAudioContext;
+    const ctx = new AudioCtx();
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
     oscillator.connect(gainNode);

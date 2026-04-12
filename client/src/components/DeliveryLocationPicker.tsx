@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GeoPoint } from '../../utils/fleetSimulation';
+import { GeoPoint } from '../utils/fleetSimulation';
 import RestaurantMap from './RestaurantMap';
 
 interface DeliveryLocationPickerProps {
