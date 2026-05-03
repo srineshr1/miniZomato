@@ -1,6 +1,8 @@
+import io
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from PIL import Image
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -13,6 +15,42 @@ from app.schemas.violation import ViolationCreate, ViolationOut, ViolationResolv
 from app.routers.auth import require_role
 
 router = APIRouter(prefix="/safety", tags=["Safety"])
+
+
+def _analyze_helmet(img_bytes: bytes) -> tuple[bool, float]:
+    """
+    Heuristic: low skin-tone ratio in upper-center region → helmet present.
+    Not production ML — demo placeholder.
+    """
+    try:
+        img = Image.open(io.BytesIO(img_bytes)).convert("RGB").resize((224, 224))
+        w, h = img.size
+        crop = img.crop((w // 4, 0, 3 * w // 4, int(h * 0.55)))
+        pixels = list(crop.getdata())
+        total = len(pixels)
+
+        brightness = sum(r + g + b for r, g, b in pixels) / (total * 3)
+        if brightness < 20:
+            return False, 0.0
+
+        skin = sum(
+            1 for r, g, b in pixels
+            if r > 95 and g > 40 and b > 20
+            and max(r, g, b) - min(r, g, b) > 15
+            and abs(int(r) - int(g)) > 15
+            and r > g and r > b
+        )
+        ratio = skin / total
+
+        if ratio < 0.08:
+            return True, round(min(0.95, 0.75 + (0.08 - ratio) * 2.5), 2)
+        elif ratio < 0.18:
+            conf = 0.5 + (0.13 - ratio) * 3.0
+            return conf > 0, round(max(0.1, abs(conf)), 2)
+        else:
+            return False, round(min(0.93, 0.5 + (ratio - 0.18) * 2.0), 2)
+    except Exception:
+        return False, 0.0
 
 
 @router.get("/speed/{partner_id}")
@@ -52,6 +90,30 @@ def check_helmet(
         "partner_id": partner_id,
         "helmet_detected": partner.helmet_detected,
         "camera_active": partner.camera_active,
+    }
+
+
+@router.post("/helmet/detect")
+async def detect_helmet(
+    image: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(UserRole.DELIVERY)),
+):
+    partner = db.query(DeliveryPartner).filter(DeliveryPartner.user_id == current_user.id).first()
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner profile not found")
+
+    img_bytes = await image.read()
+    helmet_detected, confidence = _analyze_helmet(img_bytes)
+
+    partner.helmet_detected = helmet_detected
+    db.commit()
+
+    return {
+        "helmet_detected": helmet_detected,
+        "confidence": confidence,
+        "message": "Helmet detected. Safe to ride!" if helmet_detected else "Helmet not detected. Please wear your helmet.",
+        "partner_id": partner.id,
     }
 
 
