@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MapContainer, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
-import { createPartnerIcon, createRestaurantIcon, createCustomerIcon } from '../../utils/mapIcons';
+import { createCurrentLocationIcon, createTravellingIcon, createRestaurantIcon, createCustomerIcon } from '../../utils/mapIcons';
 import TopBar from '../../components/TopBar';
 import Panel from '../../components/Panel';
 import { usePolling } from '../../hooks/usePolling';
@@ -32,7 +32,7 @@ function createTempRng() {
 export default function Navigation() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { emitLocationUpdate, isConnected, orderUpdate } = useSocket();
+  const { emitLocationUpdate, isConnected, orderUpdate, joinTracking } = useSocket();
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrderIds, setSelectedOrderIds] = useState<number[]>([]);
@@ -51,6 +51,8 @@ export default function Navigation() {
   const [showDeliverButton, setShowDeliverButton] = useState(false);
   const [travelPoints, setTravelPoints] = useState<GeoPoint[]>([]);
   const [loadingTravel, setLoadingTravel] = useState(false);
+  const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
+  const [mobileSheetTab, setMobileSheetTab] = useState<'route' | 'sequence' | 'stats'>('route');
 
   const rafRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
@@ -98,6 +100,10 @@ export default function Navigation() {
       }
     },
   );
+
+  useEffect(() => {
+    selectedOrderIds.forEach((id) => joinTracking(id));
+  }, [selectedOrderIds, joinTracking]);
 
   useEffect(() => {
     if (activeOrders.length === 0) {
@@ -354,6 +360,27 @@ export default function Navigation() {
     return () => clearInterval(emitInterval);
   }, [isTravelling, partnerId, travellingMarkerPos, travelSpeed, emitLocationUpdate]);
 
+  useEffect(() => {
+    if (!partnerId || isTravelling) return;
+    if (!('geolocation' in navigator)) return;
+
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude, speed } = position.coords;
+        const speedKmh = Math.max(0, (speed || 0) * 3.6);
+        setPartnerPoint({ lat: latitude, lng: longitude });
+        emitLocationUpdate({ partner_id: partnerId, lat: latitude, lng: longitude, speed_kmh: speedKmh });
+        void deliveryService.updateLocation(latitude, longitude, speedKmh).catch(() => {});
+      },
+      (err) => {
+        console.warn('[GPS] watchPosition error', err);
+      },
+      { enableHighAccuracy: true, maximumAge: 3000, timeout: 20000 },
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [partnerId, isTravelling, emitLocationUpdate]);
+
   const routeLine = useMemo<[number, number][]>(() => {
     if (!travelPoints.length || !partnerPoint) return [];
     if (arrivedAtStop) return [[partnerPoint.lat, partnerPoint.lng]];
@@ -400,6 +427,8 @@ export default function Navigation() {
       setCurrentLegIndex(currentLegIndex + 1);
     }
     await orderService.updateStatus(currentOrder.id, 'picked_up');
+    const mine = await orderService.list();
+    setOrders(mine);
   };
 
   const handleDeliverIt = async () => {
@@ -446,7 +475,7 @@ export default function Navigation() {
           {partnerPoint && !isTravelling && (
             <Marker
               position={[partnerPoint.lat, partnerPoint.lng]}
-              icon={createPartnerIcon('online')}
+              icon={createCurrentLocationIcon()}
             >
               <Popup>You are here</Popup>
             </Marker>
@@ -455,7 +484,7 @@ export default function Navigation() {
           {travellingMarkerPos && isTravelling && (
             <Marker
               position={[travellingMarkerPos.lat, travellingMarkerPos.lng]}
-              icon={createPartnerIcon('busy')}
+              icon={createTravellingIcon()}
             >
               <Popup>🛵 Traveling at {travelSpeed} km/h</Popup>
             </Marker>
@@ -647,6 +676,149 @@ export default function Navigation() {
             </button>
           )}
         </div>
+      </div>
+
+      {/* Mobile FAB — only visible at ≤768px via CSS */}
+      <button
+        className="nav-mobile-fab"
+        onClick={() => setMobileSheetOpen((o) => !o)}
+        aria-label="Route builder"
+      >
+        {mobileSheetOpen ? '✕' : '🗺️'}
+      </button>
+
+      {/* Mobile sheet — Route/Sequence/Stats tabs (replaces hidden overlays on mobile) */}
+      <div className={`nav-mobile-sheet${mobileSheetOpen ? ' open' : ''}`}>
+        <div className="nav-mobile-sheet-tabs">
+          {(['route', 'sequence', 'stats'] as const).map((tab) => (
+            <button
+              key={tab}
+              className={`nav-mobile-sheet-tab${mobileSheetTab === tab ? ' active' : ''}`}
+              onClick={() => setMobileSheetTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {mobileSheetTab === 'route' && (
+          <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>ROUTE BUILDER · UP TO 4 ORDERS</div>
+            {activeOrders.length === 0 ? (
+              <div style={{ color: 'var(--text2)', fontSize: 12 }}>No active orders assigned.</div>
+            ) : (
+              activeOrders.map((order) => {
+                const checked = selectedOrderIds.includes(order.id);
+                const disabled = !checked && selectedOrderIds.length >= 4;
+                const pickupPending = ['confirmed', 'preparing', 'ready'].includes(order.status);
+                return (
+                  <label
+                    key={order.id}
+                    className={`turn-item ${checked ? 'active' : 'normal'}`}
+                    style={{ cursor: disabled || isTravelling ? 'not-allowed' : 'pointer', opacity: disabled || isTravelling ? 0.5 : 1 }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={disabled || isTravelling}
+                      onChange={() => toggleOrder(order.id)}
+                    />
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 12 }}>
+                        #{order.order_number} · {order.items?.[0]?.food_item_name || 'Order'}
+                      </div>
+                      <div style={{ fontSize: 10, color: 'var(--text3)', fontFamily: 'var(--font-mono)' }}>
+                        {pickupPending ? 'Pickup pending' : 'Delivering'} · {statusLabel(order.status)}
+                      </div>
+                    </div>
+                  </label>
+                );
+              })
+            )}
+            <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+              <button className="btn btn-ghost" style={{ fontSize: 11, padding: '6px 10px' }} onClick={() => void syncCurrentLocation()} disabled={isTravelling}>
+                📍 Sync
+              </button>
+              <button
+                className="btn btn-primary"
+                style={{ fontSize: 11, padding: '6px 10px', flex: 1 }}
+                onClick={() => void buildRoute()}
+                disabled={loadingRoute || selectedOrderIds.length === 0 || isTravelling}
+              >
+                {loadingRoute ? 'Optimizing...' : '🗺️ Optimize Route'}
+              </button>
+            </div>
+            {routeError && <div style={{ color: 'var(--red)', fontSize: 11 }}>{routeError}</div>}
+          </div>
+        )}
+
+        {mobileSheetTab === 'sequence' && (
+          <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ fontSize: 10, color: 'var(--text3)', marginBottom: 4 }}>DELIVERY SEQUENCE · {routeMeta?.algorithm || 'NO ROUTE'}</div>
+            {routeStops.length === 0 ? (
+              <div style={{ color: 'var(--text2)', fontSize: 12 }}>Optimize route to view stops.</div>
+            ) : (
+              routeStops.map((stop, index) => {
+                const order = activeOrders.find((o) => o.id === stop.order_id);
+                return (
+                  <div
+                    key={stop.order_id}
+                    className={`route-step ${stop.priority === 1 ? 'priority-1' : stop.priority === 2 ? 'priority-2' : 'priority-3'}`}
+                  >
+                    <div className={`route-num ${index === 0 ? 'n1' : index === 1 ? 'n2' : index === 2 ? 'n3' : 'n4'}`}>
+                      {index + 1}
+                    </div>
+                    <div className="route-food-emoji">{stop.stop_type === 'pickup' ? '🏪' : stop.food_emoji}</div>
+                    <div className="route-info">
+                      <div className="route-customer">#{stop.order_number} · {stop.food_name}</div>
+                      <div className="route-reason">
+                        {stop.stop_type === 'pickup'
+                          ? `Pickup · ${stop.distance_km} km`
+                          : stop.priority_reason || `${stop.distance_km} km`}
+                      </div>
+                      {order && (
+                        <button
+                          className="btn btn-ghost"
+                          style={{ marginTop: 6, padding: '4px 8px', fontSize: 10 }}
+                          disabled={!actionEnabled(order.status) || statusLoadingOrderId === order.id}
+                          onClick={() => void runStatusAction(order)}
+                        >
+                          {statusLoadingOrderId === order.id ? '...' : actionLabel(order.status)}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+
+        {mobileSheetTab === 'stats' && (
+          <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ fontSize: 10, color: 'var(--text3)', marginBottom: 2 }}>ROUTE STATS</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+              <span style={{ color: 'var(--text2)' }}>Distance</span>
+              <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--amber)' }}>
+                {routeMeta ? `${routeMeta.totalDistance.toFixed(1)} km` : '—'}
+              </span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+              <span style={{ color: 'var(--text2)' }}>Duration</span>
+              <span style={{ fontFamily: 'var(--font-mono)' }}>{routeMeta ? `${routeMeta.eta} min` : '—'}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+              <span style={{ color: 'var(--text2)' }}>Speed</span>
+              <span style={{ fontFamily: 'var(--font-mono)', color: isTravelling ? '#3b82f6' : 'var(--text3)' }}>
+                {isTravelling ? `${travelSpeed} km/h` : '—'}
+              </span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+              <span style={{ color: 'var(--text2)' }}>Stops</span>
+              <span style={{ fontFamily: 'var(--font-mono)' }}>{routeStops.length}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Arrival banner - centered over map */}

@@ -4,7 +4,7 @@ import TopBar from '../../components/TopBar';
 import Timeline from '../../components/Timeline';
 import Chip from '../../components/Chip';
 import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
-import { createRestaurantIcon, createCustomerIcon, createPartnerIcon } from '../../utils/mapIcons';
+import { createRestaurantIcon, createCustomerIcon, createTravellingIcon } from '../../utils/mapIcons';
 import { orderService } from '../../services/orderService';
 import { usePolling } from '../../hooks/usePolling';
 import { useSocket } from '../../contexts/SocketContext';
@@ -38,7 +38,7 @@ function statusChip(status: Order['status']) {
 export default function TrackOrder() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
-  const { orderUpdate, partnerLocation, joinTracking } = useSocket();
+  const { orderUpdate, partnerLocation, joinTracking, joinPartnerRoom } = useSocket();
 
   usePolling(
     () => orderService.list(),
@@ -74,6 +74,12 @@ export default function TrackOrder() {
     }
   }, [activeOrder, joinTracking]);
 
+  useEffect(() => {
+    if (activeOrder?.partner_id) {
+      joinPartnerRoom(activeOrder.partner_id);
+    }
+  }, [activeOrder?.partner_id, joinPartnerRoom]);
+
   const stageIndex = activeOrder ? customerSimpleStageIndex(activeOrder.status) : -1;
   const stageLabel = activeOrder
     ? CUSTOMER_SIMPLE_STEPS[stageIndex]?.label || 'Order in progress'
@@ -83,7 +89,8 @@ export default function TrackOrder() {
     : 0;
 
   const livePartnerPoint = useMemo(() => {
-    if (activeOrder?.status !== 'in_transit' || !partnerLocation) return null;
+    if (!activeOrder || !partnerLocation) return null;
+    if (!['confirmed', 'preparing', 'ready', 'picked_up', 'in_transit'].includes(activeOrder.status)) return null;
     if (activeOrder.partner_id && partnerLocation.partner_id !== activeOrder.partner_id) return null;
     return { lat: partnerLocation.lat, lng: partnerLocation.lng };
   }, [activeOrder, partnerLocation]);

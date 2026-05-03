@@ -9,12 +9,15 @@
 - Frontend (from `client/`): `npm run dev`, `npm run lint`, `npm run build`.
 - Backend: create venv, install `requirements.txt`, then `python run.py` from `server/`.
 - Backend startup (`server/app/main.py` lifespan) auto-creates tables, runs schema migrations via raw SQL ALTER TABLE, and seeds demo data on empty DB.
-- If `restaurants_cleaned.csv` exists at the repo root, it is loaded into the DB on first startup (zone-filtered around Hyderabad). Backend logs: `[Startup] Loaded restaurants from CSV (zone filtered)` or `[Startup] Could not load restaurants from CSV: <error>`.
+- If `restaurants_cleaned.csv` exists at the repo root, it is loaded into the DB on first startup (zone-filtered around Hyderabad). The CSV path in lifespan is `../restaurants_cleaned.csv` relative to `server/`. Backend logs: `[Startup] Loaded restaurants from CSV (zone filtered)` or `[Startup] Could not load restaurants from CSV: <error>`.
 - Seeded logins: `admin@smartroute.in` / `admin1234`, `demo@smartroute.in` / `demo1234`, `arjun@smartroute.in` / `demo1234`.
+- There is no test suite in this repo.
 
 ## Environment and state gotchas
 - Backend commands require `cwd=server/`; `.env` loads from that directory (`app/config.py`) and SQLite path is relative (`sqlite:///./smartroute.db`).
+- `.env` is gitignored; `server/.env.example` exists. Copy it to `server/.env` before first run.
 - Frontend API base URL comes from `VITE_API_URL`; default is `http://localhost:8000` (`client/src/services/api.ts` and `client/src/contexts/SocketContext.tsx`).
+- Login endpoint matches role (`server/app/routers/auth.py:80`): a user must log in with their correct role (e.g. a delivery user cannot log in as `customer`).
 
 ## Architecture facts that matter for edits
 - `socket_app = _socketio.ASGIApp(sio, app)` in `app/main.py` wraps the FastAPI app; running `python run.py` uses `app.main:socket_app`.

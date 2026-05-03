@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Ricky\\\\Desktop\\\\Projects\\\\Delivery\\\\client\\\\src\" -Recurse -File | Select-Object FullName | ForEach-Object { $_.FullName } | Sort-Object)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Ricky\\\\Desktop\\\\Projects\\\\Delivery\\\\client\\\\src\" -Recurse | Where-Object { $_.PSIsContainer } | Sort-Object FullName | ForEach-Object { $_.FullName })",
+      "Bash(npx tsc *)"
+    ]
+  }
+}

@@ -3,7 +3,13 @@ import { createContext, useContext, useState, useCallback, useEffect, ReactNode,
 import { io, Socket } from 'socket.io-client';
 import { Order } from '../types';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const resolveBase = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  const { hostname } = window.location;
+  if (hostname !== 'localhost' && hostname !== '127.0.0.1') return `http://${hostname}:8000`;
+  return 'http://localhost:8000';
+};
+const SOCKET_URL = resolveBase();
 
 interface Notification {
   id: string;

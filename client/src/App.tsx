@@ -4,6 +4,7 @@ import { SocketProvider } from './contexts/SocketContext';
 import { CartProvider } from './contexts/CartContext';
 import Sidebar from './components/Sidebar';
 import Toast from './components/Toast';
+import BottomNav from './components/BottomNav';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import OrderFood from './pages/customer/OrderFood';
@@ -17,6 +18,8 @@ import AdminOrders from './pages/admin/AdminOrders';
 import AdminPartners from './pages/admin/AdminPartners';
 import AdminViolations from './pages/admin/AdminViolations';
 import AdminRestaurants from './pages/admin/AdminRestaurants';
+import Profile from './pages/Profile';
+import Cart from './pages/customer/Cart';
 
 const ROLE_HOME: Record<string, string> = {
   customer: '/customer/order',
@@ -57,10 +60,13 @@ function AppLayout() {
           <Route path="/admin/violations" element={<ProtectedRoute roles={['admin']}><AdminViolations /></ProtectedRoute>} />
           <Route path="/admin/restaurants" element={<ProtectedRoute roles={['admin']}><AdminRestaurants /></ProtectedRoute>} />
 
+          <Route path="/customer/cart" element={<ProtectedRoute roles={['customer']}><Cart /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute roles={['customer', 'delivery', 'admin']}><Profile /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to={fallbackRoute} replace />} />
         </Routes>
       </div>
       <Toast />
+      <BottomNav />
     </div>
   );
 }

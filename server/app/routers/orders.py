@@ -36,7 +36,7 @@ async def _emit_new_order(order: Order):
             'priority_reason': order.priority_reason,
             'eta_minutes': order.eta_minutes,
             'status': order.status.value,
-            'items': [{'name': i.food_item.name, 'quantity': i.quantity} for i in order.items],
+            'items': [{'id': i.id, 'food_item_id': i.food_item_id, 'quantity': i.quantity, 'unit_price': i.unit_price, 'food_item_name': i.food_item.name, 'food_item_emoji': i.food_item.emoji} for i in order.items],
         }, room='delivery_partners')
     except Exception as e:
         print(f"[Socket] Failed to emit new_order: {e}")
@@ -44,14 +44,16 @@ async def _emit_new_order(order: Order):
 
 async def _emit_order_update(order_id: int, status: str, partner_id: int | None = None):
     from app.sio_server import sio
+    payload = {'order_id': order_id, 'status': status, 'partner_id': partner_id}
     try:
-        await sio.emit('order_update', {
-            'order_id': order_id,
-            'status': status,
-            'partner_id': partner_id,
-        }, room=f'order_{order_id}')
+        await sio.emit('order_update', payload, room=f'order_{order_id}')
     except Exception as e:
-        print(f"[Socket] Failed to emit order_update: {e}")
+        print(f"[Socket] Failed to emit order_update to order room: {e}")
+    if partner_id:
+        try:
+            await sio.emit('order_update', payload, room=f'partner_{partner_id}')
+        except Exception as e:
+            print(f"[Socket] Failed to emit order_update to partner room: {e}")
 
 
 async def _emit_partner_location(order_id: int, partner_id: int, lat: float, lng: float):

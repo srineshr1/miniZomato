@@ -1,0 +1,1130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Srinesh Rudraksha — Developer & Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Archivo:wght@400;500;700;900&family=Archivo+Narrow:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --paper: #f2ede4;
+  --paper-2: #ebe4d7;
+  --ink: #14120f;
+  --ink-soft: #3a342c;
+  --mute: #8a8174;
+  --rule: #d9d1c1;
+  --accent: #c8412b;      /* vermillion */
+  --accent-soft: #e8c5bb;
+  --display: "Instrument Serif", "Playfair Display", Georgia, serif;
+  --sans: "Instrument Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+/* palette variants */
+body.pal-midnight {
+  --paper: #0f0d0a;
+  --paper-2: #151210;
+  --ink: #f0e9db;
+  --ink-soft: #c9c0ae;
+  --mute: #6b6456;
+  --rule: #2a2520;
+  --accent: #e85d3c;
+  --accent-soft: #3a2018;
+}
+body.pal-noir {
+  --paper: #eae7e0;
+  --paper-2: #dfdbd2;
+  --ink: #0a0a0a;
+  --ink-soft: #2a2a2a;
+  --mute: #7a7a7a;
+  --rule: #c9c5bb;
+  --accent: #0a0a0a;
+  --accent-soft: #c9c5bb;
+}
+/* display font variants */
+body.disp-archivo { --display: "Archivo", Helvetica, sans-serif; }
+body.disp-playfair { --display: "Playfair Display", Georgia, serif; }
+body.disp-narrow { --display: "Archivo Narrow", Helvetica, sans-serif; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body { overflow-x: hidden; transition: background .5s ease, color .5s ease; }
+
+/* selection */
+::selection { background: var(--accent); color: var(--paper); }
+
+/* noise overlay */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: .4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+body.pal-midnight::before { mix-blend-mode: screen; opacity: .35; }
+
+/* nav */
+nav.top {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 40px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  mix-blend-mode: difference;
+  color: #e8e2d5;
+}
+nav.top .brand { display: flex; align-items: center; gap: 10px; }
+nav.top .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+nav.top ul { display: flex; gap: 28px; list-style: none; }
+nav.top a { color: inherit; text-decoration: none; position: relative; padding: 4px 0; }
+nav.top a .num { opacity: .5; margin-right: 6px; font-size: 9px; }
+nav.top a:hover { color: var(--accent); }
+
+/* scroll progress */
+.progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: var(--accent); z-index: 100;
+  transition: width .1s linear;
+}
+
+/* section */
+section {
+  position: relative;
+  padding: 0 40px;
+  min-height: 100vh;
+}
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 110vh;
+  padding-top: 140px;
+  padding-bottom: 80px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero .eyebrow {
+  display: flex; align-items: baseline; gap: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero .eyebrow .spacer { flex: 1; }
+.hero .eyebrow .loc::before { content: "◉ "; color: var(--accent); }
+
+/* stretched display */
+.mega {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: .82;
+  letter-spacing: -.04em;
+  color: var(--ink);
+  font-size: clamp(80px, 18vw, 280px);
+}
+.mega .it { font-style: italic; color: var(--accent); }
+.mega .tight { letter-spacing: -.06em; }
+
+.hero-name {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 20px;
+}
+.hero-name .line1 { text-align: left; }
+.hero-name .line2 {
+  text-align: right;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(80px, 18vw, 280px);
+  line-height: .82;
+  letter-spacing: -.04em;
+  color: var(--accent);
+  margin-top: -.08em;
+}
+.hero-name .line3 {
+  font-family: var(--display);
+  font-size: clamp(80px, 18vw, 280px);
+  line-height: .82;
+  letter-spacing: -.04em;
+  color: var(--ink);
+  margin-top: -.08em;
+}
+
+/* hero meta row */
+.hero-meta {
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--ink-soft);
+}
+.hero-meta .label { color: var(--mute); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 8px; }
+.hero-meta .val { color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.4; }
+.hero-meta .val .big { font-family: var(--display); font-size: 28px; line-height: 1; display:block; margin-bottom: 4px; }
+
+/* floating shape */
+.shape {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+}
+.shape.circle {
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  top: 120px; right: 60px;
+  mix-blend-mode: multiply;
+}
+.shape.circle::before {
+  content: ""; position: absolute; inset: 30px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+}
+.shape.circle::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, var(--accent) 0%, transparent 55%);
+  opacity: .15;
+  border-radius: 50%;
+}
+.shape.word {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 220px;
+  line-height: 1;
+  color: var(--accent-soft);
+  opacity: .35;
+  top: 60px; right: -20px;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* marquee */
+.marquee {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+  padding: 18px 0;
+  white-space: nowrap;
+  margin: 0 -40px;
+  background: var(--paper-2);
+}
+.marquee-track {
+  display: inline-flex;
+  gap: 48px;
+  animation: marquee 40s linear infinite;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 60px;
+  line-height: 1;
+  color: var(--ink);
+}
+.marquee-track span.sep { color: var(--accent); font-style: normal; font-family: var(--sans); font-size: 32px; align-self: center; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ============ WORK ============ */
+.work {
+  padding-top: 140px;
+  padding-bottom: 140px;
+  position: relative;
+}
+.section-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 30px;
+  align-items: baseline;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 60px;
+}
+.section-head .kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.section-head h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(44px, 7vw, 110px);
+  line-height: .9;
+  letter-spacing: -.03em;
+}
+.section-head h2 em { color: var(--accent); }
+.section-head .count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: .08em;
+}
+
+.project-list { display: flex; flex-direction: column; }
+.project {
+  position: relative;
+  display: grid;
+  grid-template-columns: 60px 1fr 1.2fr 180px 120px;
+  gap: 40px;
+  align-items: center;
+  padding: 42px 8px;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: padding .4s cubic-bezier(.2,.7,.2,1), color .4s;
+  overflow: hidden;
+}
+.project::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: translateY(101%);
+  transition: transform .55s cubic-bezier(.8,0,.2,1);
+  z-index: 0;
+}
+.project:hover::before { transform: translateY(0); }
+.project:hover { color: var(--paper); padding-left: 30px; }
+.project:hover .p-num,
+.project:hover .p-meta,
+.project:hover .p-tag { color: var(--paper); opacity: .8; }
+.project:hover .p-title .italic { color: var(--accent); }
+.project:hover .p-arrow { transform: translateX(6px) rotate(-45deg); color: var(--accent); }
+.project:hover .p-preview { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+.project > * { position: relative; z-index: 1; }
+.p-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mute);
+  letter-spacing: .05em;
+  transition: color .4s;
+}
+.p-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.p-title .italic { font-style: italic; color: var(--accent); transition: color .4s; }
+.p-desc {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 420px;
+}
+.project:hover .p-desc { color: var(--paper); opacity: .75; }
+.p-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .05em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+.p-tag { display: block; color: var(--ink); }
+.project:hover .p-tag { color: var(--paper); }
+.p-arrow {
+  font-size: 28px;
+  color: var(--ink);
+  transition: transform .4s, color .4s;
+  justify-self: end;
+  display: inline-block;
+}
+
+/* preview that follows cursor */
+.p-preview {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 360px; height: 240px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.92);
+  transition: opacity .35s, transform .4s cubic-bezier(.2,.7,.2,1);
+  box-shadow: 0 30px 80px rgba(0,0,0,.3);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+.p-preview svg { width: 100%; height: 100%; display: block; }
+
+/* ============ ABOUT ============ */
+.about {
+  padding-top: 140px;
+  padding-bottom: 140px;
+  position: relative;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-col .quote {
+  font-family: var(--display);
+  font-size: clamp(44px, 5.5vw, 90px);
+  line-height: 1;
+  letter-spacing: -.025em;
+  color: var(--ink);
+  margin-bottom: 40px;
+}
+.about-col .quote em { color: var(--accent); }
+.about-col .quote .strike { text-decoration: line-through; text-decoration-thickness: 3px; color: var(--mute); }
+
+.about-col p {
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 520px;
+  margin-bottom: 20px;
+}
+.about-col p .drop {
+  font-family: var(--display);
+  font-size: 64px;
+  line-height: .8;
+  float: left;
+  padding-right: 10px;
+  padding-top: 4px;
+  color: var(--accent);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  margin-top: 40px;
+}
+.facts .f {
+  padding: 24px 20px 24px 0;
+  border-bottom: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+}
+.facts .f:nth-child(2n) { border-right: none; padding-left: 24px; }
+.facts .f:nth-last-child(-n+2) { border-bottom: none; }
+.facts .label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 10px;
+}
+.facts .val {
+  font-family: var(--display);
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+
+/* tech chips */
+.tech-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 20px;
+}
+.tech-grid span {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 6px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 100px;
+  color: var(--ink-soft);
+  transition: all .25s;
+  cursor: default;
+}
+.tech-grid span:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+
+/* exp timeline */
+.exp {
+  margin-top: 40px;
+}
+.exp .row {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+.exp .row:last-child { border-bottom: 1px solid var(--rule); }
+.exp .yr {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mute);
+  letter-spacing: .05em;
+}
+.exp .role {
+  font-family: var(--display);
+  font-size: 24px;
+  line-height: 1.2;
+}
+.exp .role .it { font-style: italic; color: var(--accent); }
+.exp .at {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mute);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* ============ CONTACT ============ */
+.contact {
+  padding-top: 140px;
+  padding-bottom: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.contact .giant {
+  font-family: var(--display);
+  font-size: clamp(72px, 16vw, 260px);
+  line-height: .88;
+  letter-spacing: -.04em;
+  color: var(--ink);
+  position: relative;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+}
+.contact .giant .it { font-style: italic; color: var(--accent); display: block; }
+.contact .giant .outline {
+  -webkit-text-stroke: 2px var(--ink);
+  color: transparent;
+  display: block;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid var(--rule);
+  position: relative;
+  z-index: 2;
+  background: var(--paper);
+}
+.contact .email-card {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 18px 24px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 14px;
+  letter-spacing: .02em;
+  border-radius: 100px;
+  transition: transform .3s cubic-bezier(.2,.7,.2,1), background .3s;
+}
+.contact .email-card:hover { transform: translateX(6px); background: var(--accent); }
+.contact .email-card .arr { transition: transform .3s; }
+.contact .email-card:hover .arr { transform: translateX(4px) rotate(-45deg); }
+
+.socials { display: flex; flex-direction: column; gap: 2px; }
+.socials a {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+  transition: padding .3s, color .3s;
+}
+.socials a:last-child { border-bottom: 1px solid var(--rule); }
+.socials a:hover { padding-left: 14px; color: var(--accent); }
+.socials .plat { font-family: var(--mono); font-size: 11px; color: var(--mute); letter-spacing: .1em; text-transform: uppercase; }
+.socials .handle { font-family: var(--display); font-size: 24px; font-style: italic; }
+.socials .arr { font-family: var(--mono); font-size: 18px; }
+
+/* footer */
+footer {
+  padding: 30px 40px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .05em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+footer .center { text-align: center; }
+footer .right { text-align: right; }
+footer .status::before { content: "● "; color: #2d8a3e; }
+
+/* cursor dot */
+.cursor-dot {
+  position: fixed;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width .25s, height .25s, background .25s;
+}
+.cursor-dot.big { width: 60px; height: 60px; }
+
+/* floating letterforms in background */
+.bg-letter {
+  position: absolute;
+  font-family: var(--display);
+  font-style: italic;
+  pointer-events: none;
+  color: var(--ink);
+  opacity: .04;
+  font-size: 600px;
+  line-height: .8;
+  z-index: 0;
+}
+
+/* Tweaks panel */
+.tweaks-panel {
+  position: fixed;
+  right: 24px; bottom: 24px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 18px 20px;
+  z-index: 200;
+  min-width: 240px;
+  font-family: var(--mono);
+  font-size: 11px;
+  box-shadow: 8px 8px 0 var(--ink);
+  display: none;
+}
+.tweaks-panel.open { display: block; }
+.tweaks-panel h4 {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 14px;
+}
+.tweaks-panel .group { margin-bottom: 14px; }
+.tweaks-panel .lbl { color: var(--mute); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; font-size: 10px; }
+.tweaks-panel .opts { display: flex; gap: 6px; flex-wrap: wrap; }
+.tweaks-panel button {
+  font-family: var(--mono); font-size: 10px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  cursor: pointer;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.tweaks-panel button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+@media (max-width: 900px) {
+  section { padding: 0 20px; }
+  nav.top { padding: 18px 20px; }
+  nav.top ul { gap: 14px; }
+  .project { grid-template-columns: 40px 1fr auto; }
+  .project .p-desc, .project .p-meta { display: none; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-meta { grid-template-columns: 1fr 1fr; }
+  .marquee { margin: 0 -20px; }
+  footer { grid-template-columns: 1fr; padding: 20px; }
+  footer .center, footer .right { text-align: left; }
+  .shape.circle { width: 240px; height: 240px; right: -40px; }
+}
+</style>
+</head>
+<body class="pal-paper disp-instrument">
+
+<div class="progress" id="progress"></div>
+<div class="cursor-dot" id="cursor"></div>
+
+<nav class="top">
+  <div class="brand"><span class="dot"></span>Srinesh&nbsp;R.</div>
+  <ul>
+    <li><a href="#start"><span class="num">01</span>Start</a></li>
+    <li><a href="#work"><span class="num">02</span>Work</a></li>
+    <li><a href="#about"><span class="num">03</span>About</a></li>
+    <li><a href="#contact"><span class="num">04</span>Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="start" data-screen-label="01 Hero">
+  <div class="shape word" id="shapeWord">folio</div>
+  <div class="shape circle" id="shapeCircle"></div>
+
+  <div class="eyebrow">
+    <span>№ 2026 — Portfolio Vol. IV</span>
+    <span class="spacer"></span>
+    <span class="loc">Hyderabad, IN</span>
+    <span>Available for freelance</span>
+  </div>
+
+  <div class="hero-name">
+    <div class="mega line1">Srinesh</div>
+    <div class="line2">Rudraksha&nbsp;<span style="font-style:normal; color: var(--ink);">—</span></div>
+    <div class="line3" style="font-style: normal;"><span style="font-style: italic; color: var(--accent);">builds</span>, animates<span style="color: var(--accent);">.</span></div>
+  </div>
+
+  <div class="hero-meta">
+    <div>
+      <div class="label">Manifesto</div>
+      <div class="val">Full-stack developer, motion designer, and hardware tinkerer. I make things that work, and occasionally things that don't — on purpose.</div>
+    </div>
+    <div>
+      <div class="label">Currently</div>
+      <div class="val"><span class="big">04</span>Active projects in the wild, from a Spotify LCD to an AI calendar.</div>
+    </div>
+    <div>
+      <div class="label">Born to</div>
+      <div class="val"><span class="big">Ship</span>Code, pixels, and half-baked ideas turned into somethings.</div>
+    </div>
+    <div>
+      <div class="label">Scroll</div>
+      <div class="val"><span class="big">↓</span>or don't. I'll be here.</div>
+    </div>
+  </div>
+</section>
+
+<!-- marquee -->
+<div class="marquee">
+  <div class="marquee-track">
+    <em>Full-stack</em><span class="sep">◆</span>
+    <em>Motion</em><span class="sep">◆</span>
+    <em>Hardware</em><span class="sep">◆</span>
+    <em>Interfaces</em><span class="sep">◆</span>
+    <em>Story-mode</em><span class="sep">◆</span>
+    <em>Finisher</em><span class="sep">◆</span>
+    <em>Full-stack</em><span class="sep">◆</span>
+    <em>Motion</em><span class="sep">◆</span>
+    <em>Hardware</em><span class="sep">◆</span>
+    <em>Interfaces</em><span class="sep">◆</span>
+    <em>Story-mode</em><span class="sep">◆</span>
+    <em>Finisher</em><span class="sep">◆</span>
+  </div>
+</div>
+
+<!-- ============ WORK ============ -->
+<section class="work" id="work" data-screen-label="02 Work">
+  <div class="bg-letter" style="top: 80px; right: -80px;">W</div>
+
+  <div class="section-head">
+    <div class="kicker">§ 02 / Work</div>
+    <h2>Selected <em>projects</em></h2>
+    <div class="count">05 ENTRIES · 2024—2026</div>
+  </div>
+
+  <div class="project-list" id="projList">
+    <!-- 5 projects -->
+    <a class="project" data-num="01">
+      <div class="p-num">01 —</div>
+      <div class="p-title">Antify <span class="italic">Music</span></div>
+      <div class="p-desc">A reimagined mobile music player with tactile playback, ant-themed flourishes, and a queue that behaves like a pocket journal.</div>
+      <div class="p-meta"><span class="p-tag">Mobile</span>Flutter · Firebase · 2025</div>
+      <div class="p-arrow">→</div>
+      <div class="p-preview">
+        <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid slice">
+          <rect width="360" height="240" fill="#0d0b08"/>
+          <circle cx="180" cy="120" r="80" fill="none" stroke="#c8412b" stroke-width="1"/>
+          <circle cx="180" cy="120" r="40" fill="#c8412b"/>
+          <circle cx="180" cy="120" r="6" fill="#0d0b08"/>
+          <text x="20" y="220" fill="#e8e2d5" font-family="Instrument Serif" font-size="24" font-style="italic">Antify ♫</text>
+        </svg>
+      </div>
+    </a>
+
+    <a class="project" data-num="02">
+      <div class="p-num">02 —</div>
+      <div class="p-title">AI <span class="italic">Calendar</span></div>
+      <div class="p-desc">Calendar that reads your messy notes and rebuilds your week. Type "lunch Tuesday" — it knows who, where, and whether to block focus.</div>
+      <div class="p-meta"><span class="p-tag">Web / AI</span>Next · GPT · 2025</div>
+      <div class="p-arrow">→</div>
+      <div class="p-preview">
+        <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid slice">
+          <rect width="360" height="240" fill="#f2ede4"/>
+          <g stroke="#14120f" stroke-width="1" fill="none">
+            <line x1="0" y1="60" x2="360" y2="60"/>
+            <line x1="0" y1="120" x2="360" y2="120"/>
+            <line x1="0" y1="180" x2="360" y2="180"/>
+            <line x1="120" y1="0" x2="120" y2="240"/>
+            <line x1="240" y1="0" x2="240" y2="240"/>
+          </g>
+          <rect x="130" y="70" width="100" height="40" fill="#c8412b"/>
+          <rect x="10" y="130" width="100" height="40" fill="#14120f"/>
+          <text x="140" y="96" fill="#f2ede4" font-family="JetBrains Mono" font-size="11">LUNCH · 1P</text>
+        </svg>
+      </div>
+    </a>
+
+    <a class="project" data-num="03">
+      <div class="p-num">03 —</div>
+      <div class="p-title">Spotify <span class="italic">LCD</span></div>
+      <div class="p-desc">A desk-side physical display for Spotify — 16x2 characters, one knob, zero notifications. Built on ESP32 with custom firmware.</div>
+      <div class="p-meta"><span class="p-tag">Hardware / IoT</span>ESP32 · C++ · 2024</div>
+      <div class="p-arrow">→</div>
+      <div class="p-preview">
+        <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid slice">
+          <rect width="360" height="240" fill="#14120f"/>
+          <rect x="40" y="60" width="280" height="120" fill="#0a3d2e" stroke="#c8412b" stroke-width="2"/>
+          <text x="60" y="115" fill="#8fffc1" font-family="JetBrains Mono" font-size="20">▶ NOW PLAYING</text>
+          <text x="60" y="150" fill="#8fffc1" font-family="JetBrains Mono" font-size="16">— Srinesh FM</text>
+        </svg>
+      </div>
+    </a>
+
+    <a class="project" data-num="04">
+      <div class="p-num">04 —</div>
+      <div class="p-title">LAN File <span class="italic">Share</span></div>
+      <div class="p-desc">Drag, drop, done. A zero-setup file courier for the network you're already on — no accounts, no cloud, no nonsense.</div>
+      <div class="p-meta"><span class="p-tag">Utility</span>Python · Go · 2024</div>
+      <div class="p-arrow">→</div>
+      <div class="p-preview">
+        <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid slice">
+          <rect width="360" height="240" fill="#f2ede4"/>
+          <circle cx="80" cy="120" r="30" fill="none" stroke="#14120f" stroke-width="2"/>
+          <circle cx="280" cy="120" r="30" fill="none" stroke="#14120f" stroke-width="2"/>
+          <path d="M110 120 Q180 60 250 120" stroke="#c8412b" stroke-width="2" fill="none" stroke-dasharray="5 5"/>
+          <polygon points="245,115 255,120 245,125" fill="#c8412b"/>
+          <text x="60" y="180" fill="#14120f" font-family="JetBrains Mono" font-size="12">192.168.1.23 → .41</text>
+        </svg>
+      </div>
+    </a>
+
+    <a class="project" data-num="05">
+      <div class="p-num">05 —</div>
+      <div class="p-title">Code Editor <span class="italic">Mobile</span></div>
+      <div class="p-desc">A pocket IDE for thumbs — syntax-aware keyboard, gesture cursor, and a terminal that fits in your coat. For the 3 AM ideas.</div>
+      <div class="p-meta"><span class="p-tag">Mobile / Tool</span>React Native · 2026</div>
+      <div class="p-arrow">→</div>
+      <div class="p-preview">
+        <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid slice">
+          <rect width="360" height="240" fill="#14120f"/>
+          <rect x="100" y="20" width="160" height="200" rx="12" fill="#1f1a14" stroke="#3a342c"/>
+          <rect x="110" y="40" width="140" height="140" fill="#0a0a0a"/>
+          <text x="120" y="60" fill="#c8412b" font-family="JetBrains Mono" font-size="9">const</text>
+          <text x="155" y="60" fill="#e8e2d5" font-family="JetBrains Mono" font-size="9">idea =</text>
+          <text x="120" y="75" fill="#8fffc1" font-family="JetBrains Mono" font-size="9">  "ship it"</text>
+          <text x="120" y="95" fill="#6b6456" font-family="JetBrains Mono" font-size="9">// 3:47 AM</text>
+        </svg>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about" data-screen-label="03 About">
+  <div class="bg-letter" style="top: 60px; left: -100px;">&amp;</div>
+
+  <div class="section-head">
+    <div class="kicker">§ 03 / About</div>
+    <h2>A brief <em>portrait</em></h2>
+    <div class="count">B. 2004 · IN · EST. 2022</div>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-col">
+      <div class="quote">
+        A developer <em>who&nbsp;builds,</em><br>
+        animates, and<br>
+        <span class="strike">sleeps.</span> <em>tinkers.</em>
+      </div>
+
+      <p><span class="drop">I</span>'m a full-stack developer, motion designer, and hardware tinkerer from Hyderabad. I build things across the stack — web apps, mobile apps, IoT systems, and everything in between.</p>
+
+      <p>When I'm not building, I'm either playing story-mode games (finished most of them), messing with hardware, or learning something new to see if I can build it. I once built a game in Unity. It was terrible. I learned a lot.</p>
+
+      <div class="tech-grid">
+        <span>React</span><span>Next.js</span><span>TypeScript</span><span>Node.js</span>
+        <span>Python</span><span>Flutter</span><span>React Native</span><span>Firebase</span>
+        <span>MongoDB</span><span>MySQL</span><span>Tailwind</span><span>Electron</span>
+        <span>ESP32</span><span>Arduino</span><span>After Effects</span><span>Blender</span>
+        <span>Figma</span><span>Unity</span>
+      </div>
+    </div>
+
+    <div class="about-col">
+      <div class="facts">
+        <div class="f">
+          <div class="label">Based</div>
+          <div class="val">Hyderabad, IN</div>
+        </div>
+        <div class="f">
+          <div class="label">Years in</div>
+          <div class="val">4+</div>
+        </div>
+        <div class="f">
+          <div class="label">Disciplines</div>
+          <div class="val">Web · Motion · IoT</div>
+        </div>
+        <div class="f">
+          <div class="label">Currently</div>
+          <div class="val">For hire</div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="row">
+          <div class="yr">2026 — NOW</div>
+          <div class="role">Want to <span class="it">get hired</span></div>
+          <div class="at">CONTACT ME →</div>
+        </div>
+        <div class="row">
+          <div class="yr">2023 — NOW</div>
+          <div class="role">Full-stack <span class="it">developer</span></div>
+          <div class="at">NOT HEAD BTW</div>
+        </div>
+        <div class="row">
+          <div class="yr">2023 — NOW</div>
+          <div class="role">Motion <span class="it">designer</span></div>
+          <div class="at">INSTAGRAM REELS</div>
+        </div>
+        <div class="row">
+          <div class="yr">2022 — 2027</div>
+          <div class="role">Graduation, <span class="it">pending</span></div>
+          <div class="at">MVSR@CSE / OU</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact" data-screen-label="04 Contact">
+  <div class="bg-letter" style="top: 20px; right: -100px;">!</div>
+
+  <div class="section-head">
+    <div class="kicker">§ 04 / Contact</div>
+    <h2>Let's make <em>something</em></h2>
+    <div class="count">AVG. REPLY · &lt; 24H</div>
+  </div>
+
+  <div class="giant" aria-hidden="true">
+    <span>Let's make</span>
+    <span class="it">something</span>
+    <span class="outline">together&nbsp;—</span>
+  </div>
+
+  <div class="contact-grid">
+    <div>
+      <p style="font-family: var(--sans); font-size: 18px; line-height: 1.5; color: var(--ink-soft); max-width: 460px; margin-bottom: 32px;">
+        Open to freelance projects, collaborations, and interesting problems. Send a note and I'll write back — probably within a day, sometimes from a train.
+      </p>
+      <a href="/cdn-cgi/l/email-protection#fe8c8b9a8c9f958d969fd08d8c97909b8d96be99939f9792d09d9193" class="email-card">
+        ✉&nbsp;&nbsp;<span class="__cf_email__" data-cfemail="d7a5a2b3a5b6bca4bfb6f9a4a5beb9b2a4bf97b0bab6bebbf9b4b8ba">[email&#160;protected]</span> <span class="arr">→</span>
+      </a>
+    </div>
+
+    <div class="socials">
+      <a href="#"><span class="plat">GitHub · 01</span><span class="handle">@srinesh1</span><span class="arr">↗</span></a>
+      <a href="#"><span class="plat">Instagram · 02</span><span class="handle">@ricky.ae</span><span class="arr">↗</span></a>
+      <a href="#"><span class="plat">Email · 03</span><span class="handle">rudraksha.srinesh</span><span class="arr">↗</span></a>
+      <a href="#"><span class="plat">Read.cv · 04</span><span class="handle">srinesh</span><span class="arr">↗</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© Srinesh Rudraksha · MMXXVI</div>
+  <div class="center status">Available for freelance</div>
+  <div class="right">Designed & built in Hyderabad</div>
+</footer>
+
+<!-- Tweaks panel -->
+<div class="tweaks-panel" id="tweaks">
+  <h4>Tweaks <span style="font-family: var(--mono); font-size: 10px; font-style: normal; color: var(--mute); letter-spacing: .1em;">/ LIVE</span></h4>
+  <div class="group">
+    <div class="lbl">Palette</div>
+    <div class="opts" data-group="pal">
+      <button data-val="paper" class="active">Paper</button>
+      <button data-val="midnight">Midnight</button>
+      <button data-val="noir">Noir</button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="lbl">Display type</div>
+    <div class="opts" data-group="disp">
+      <button data-val="instrument" class="active">Instrument</button>
+      <button data-val="playfair">Playfair</button>
+      <button data-val="archivo">Archivo</button>
+      <button data-val="narrow">Narrow</button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="lbl">Accent hue</div>
+    <div class="opts" data-group="acc">
+      <button data-val="#c8412b" class="active" style="background:#c8412b; color:#fff; border-color:#c8412b;">Vermillion</button>
+      <button data-val="#2d5b3e" style="background:#2d5b3e; color:#fff; border-color:#2d5b3e;">Moss</button>
+      <button data-val="#3b4cca" style="background:#3b4cca; color:#fff; border-color:#3b4cca;">Cobalt</button>
+      <button data-val="#c89b2b" style="background:#c89b2b; color:#fff; border-color:#c89b2b;">Mustard</button>
+    </div>
+  </div>
+</div>
+
+<!-- speaker notes? no -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script>
+/* ===== TWEAKS STATE ===== */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "pal": "paper",
+  "disp": "playfair",
+  "acc": "#2d5b3e"
+}/*EDITMODE-END*/;
+
+const state = { ...TWEAK_DEFAULTS };
+
+function applyState() {
+  document.body.classList.remove('pal-paper','pal-midnight','pal-noir');
+  document.body.classList.add('pal-' + state.pal);
+  document.body.classList.remove('disp-instrument','disp-playfair','disp-archivo','disp-narrow');
+  document.body.classList.add('disp-' + state.disp);
+  document.documentElement.style.setProperty('--accent', state.acc);
+  // update accent-soft based on accent
+  const soft = state.acc + '33';
+  document.documentElement.style.setProperty('--accent-soft', soft);
+  // sync active buttons
+  document.querySelectorAll('.tweaks-panel .opts').forEach(g => {
+    const key = g.dataset.group;
+    g.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('active', b.dataset.val === state[key]);
+    });
+  });
+}
+applyState();
+
+document.querySelectorAll('.tweaks-panel .opts').forEach(g => {
+  const key = g.dataset.group;
+  g.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    state[key] = b.dataset.val;
+    applyState();
+    try { window.parent.postMessage({type: '__edit_mode_set_keys', edits: { [key]: state[key] }}, '*'); } catch(e){}
+  });
+});
+
+/* ===== EDIT MODE HOOK ===== */
+window.addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type === '__activate_edit_mode') {
+    document.getElementById('tweaks').classList.add('open');
+  } else if (d.type === '__deactivate_edit_mode') {
+    document.getElementById('tweaks').classList.remove('open');
+  }
+});
+try { window.parent.postMessage({type: '__edit_mode_available'}, '*'); } catch(e){}
+
+/* ===== SCROLL PROGRESS + SHAPES ===== */
+const progress = document.getElementById('progress');
+const shapeCircle = document.getElementById('shapeCircle');
+const shapeWord = document.getElementById('shapeWord');
+
+function onScroll() {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const s = window.scrollY;
+  const p = Math.min(1, s / h);
+  progress.style.width = (p * 100) + '%';
+
+  // hero shape reacts
+  if (shapeCircle) {
+    shapeCircle.style.transform = `translate3d(${s * -0.12}px, ${s * 0.35}px, 0) rotate(${s * 0.15}deg)`;
+  }
+  if (shapeWord) {
+    shapeWord.style.transform = `translate3d(${s * -0.3}px, ${s * 0.15}px, 0)`;
+  }
+
+  // parallax bg letters
+  document.querySelectorAll('.bg-letter').forEach((el, i) => {
+    const rect = el.getBoundingClientRect();
+    const center = rect.top + rect.height / 2;
+    const off = (window.innerHeight / 2 - center) * 0.25;
+    el.style.transform = `translateY(${off}px) rotate(${off * 0.03}deg)`;
+  });
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* ===== CURSOR ===== */
+const cursor = document.getElementById('cursor');
+let mx = 0, my = 0, cx = 0, cy = 0;
+window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function tick() {
+  cx += (mx - cx) * 0.2;
+  cy += (my - cy) * 0.2;
+  cursor.style.left = cx + 'px';
+  cursor.style.top = cy + 'px';
+  requestAnimationFrame(tick);
+}
+tick();
+document.querySelectorAll('a, button, .project').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+});
+
+/* ===== PROJECT PREVIEW FOLLOWS MOUSE ===== */
+document.querySelectorAll('.project').forEach(p => {
+  const prev = p.querySelector('.p-preview');
+  p.addEventListener('mousemove', e => {
+    const rect = p.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    prev.style.left = x + 'px';
+    prev.style.top = y + 'px';
+  });
+});
+
+/* ===== SMOOTH ANCHOR ===== */
+document.querySelectorAll('nav.top a').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (!id || !id.startsWith('#')) return;
+    const target = document.querySelector(id);
+    if (target) {
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 40, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ===== REVEAL ON SCROLL ===== */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('in');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.project, .section-head, .facts .f, .exp .row').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)';
+  io.observe(el);
+});
+const styleEl = document.createElement('style');
+styleEl.textContent = `.in { opacity: 1 !important; transform: translateY(0) !important; }`;
+document.head.appendChild(styleEl);
+</script>
+</body>
+</html>

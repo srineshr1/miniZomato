@@ -44,6 +44,31 @@ export function createCustomerIcon(): L.DivIcon {
   return svgIcon(svg, 'svg-marker svg-marker-customer');
 }
 
+export function createCurrentLocationIcon(): L.DivIcon {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
+      <circle cx="18" cy="18" r="16" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="18" cy="18" r="9" fill="#3b82f6" fill-opacity="0.3"/>
+      <circle cx="18" cy="18" r="5" fill="#3b82f6"/>
+      <circle cx="18" cy="18" r="3" fill="white"/>
+    </svg>`;
+  return svgIcon(svg, 'svg-marker svg-marker-location');
+}
+
+export function createTravellingIcon(): L.DivIcon {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
+      <circle cx="18" cy="18" r="16" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="2"/>
+      <circle cx="12" cy="25" r="3" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+      <circle cx="24" cy="25" r="3" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+      <path d="M15 25 L17 18 L22 18 L24 22" stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 18 L20 18" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M22 18 L24 14" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="17" cy="13" r="2.5" fill="#f59e0b"/>
+    </svg>`;
+  return svgIcon(svg, 'svg-marker svg-marker-travelling');
+}
+
 export function createStaticPersonIcon(): L.DivIcon {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">

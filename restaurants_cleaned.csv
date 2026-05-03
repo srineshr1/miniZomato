@@ -1,0 +1,366 @@
+restaurant_id,name,lat,lng,address,area,cuisine,rating,source
+344033876,KFC,17.4507642,78.3793915,Hyderabad,Hyderabad Zone,chicken,N/A,osm
+344033883,Pizza Corner,17.4506168,78.3792198,Hyderabad,Hyderabad Zone,pizza,N/A,osm
+344033897,Windows of the World,17.4502975,78.3816574,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+349270034,Olive Garden,17.4450343,78.3859699,Hyderabad,Hyderabad Zone,italian,N/A,osm
+513010279,Hyderabad House,17.426299,78.4382663,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+538425766,Golden Cave Restaurant,17.4362808,78.4449429,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+538425769,Mythri Restaurant and Bar,17.4370495,78.4446481,"Satyam Theatre Road, Hyderabad",Hyderabad Zone,regional,N/A,osm
+654882404,McDonald's,17.4346181,78.3864731,Hyderabad,Hyderabad Zone,burger,N/A,osm
+660914316,Something Fishy,17.4314951,78.3887075,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+662721790,Southern Spice,17.4271464,78.4443444,Hyderabad,Hyderabad Zone,regional,N/A,osm
+708303182,Hi-Tech Bawarchi,17.4410683,78.391636,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+817353816,Cafe Coffee Day,17.435846,78.4016464,Hyderabad,Hyderabad Zone,coffee_shop,N/A,osm
+817353890,Cocos,17.4239168,78.4247745,Hyderabad,Hyderabad Zone,indian,N/A,osm
+817354056,Blue Fox,17.4232236,78.4275415,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1003619299,Kokam kitchen,17.4038249,78.3907122,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1041920541,Food Republic,17.4442239,78.3804557,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1042232799,Big Dosa,17.4474117,78.3806242,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1042239866,4 Seasons,17.4580493,78.3716287,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1042239873,Club Jayabheri,17.460477,78.3716908,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1042239879,Subway,17.4579981,78.3716555,Hyderabad,Hyderabad Zone,sandwich,N/A,osm
+1215214987,Wings n Fries,17.4631866,78.3673211,Hyderabad,Hyderabad Zone,"chicken, fish",N/A,osm
+1215243542,Spice Village,17.4619106,78.3668939,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1215250883,Oysters Blue,17.4582319,78.3661208,Hyderabad,Hyderabad Zone,indian,N/A,osm
+1215251806,Bawarichi,17.4612961,78.3668145,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1215744396,Tasty Food TamilNadu cuisine,17.46463,78.3663797,Hyderabad,Hyderabad Zone,indian,N/A,osm
+1215747409,HazelNut Bakers,17.4647351,78.3671468,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1215750038,HighLand NonVeg,17.4644587,78.3671147,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1215790311,Angaara,17.4597233,78.3665008,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1224527813,Chicken kabab,17.4391462,78.3636441,Hyderabad,Hyderabad Zone,indian,N/A,osm
+1224527821,Punjabi Rasoi AC,17.4389632,78.3642986,Hyderabad,Hyderabad Zone,indian,N/A,osm
+1242249939,Cafeteria in Krishnakanth Park,17.4413822,78.4313251,Hyderabad,Hyderabad Zone,coffee_shop,N/A,osm
+1271862360,Khana E Khaas,17.4390971,78.3984902,Hyderabad,Hyderabad Zone,international,N/A,osm
+1275490936,Gingercourt,17.4404184,78.3935111,Hyderabad,Hyderabad Zone,indian,N/A,osm
+1275490943,Pizza Hut,17.4453139,78.3863774,Hyderabad,Hyderabad Zone,pizza,N/A,osm
+1365116006,Sweet Nirvana,17.4363967,78.3972659,Hyderabad,Hyderabad Zone,international,N/A,osm
+1452415913,Roll Cal,17.4596243,78.3659996,Hyderabad,Hyderabad Zone,kebab,N/A,osm
+1642224750,Paradise Biriyani,17.4506315,78.3792865,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1650424028,Hideout,17.4402073,78.3933547,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1802664777,Aviyal Veg Restaurant,17.4470642,78.3783626,HITEC City Main Road,Hyderabad Zone,Varied,N/A,osm
+1883409259,The Clay Pot,17.425069,78.4213612,Hyderabad,Hyderabad Zone,indian,N/A,osm
+1883475067,Noodles King,17.430205,78.4418828,Hyderabad,Hyderabad Zone,chinese,N/A,osm
+1883487156,Basil,17.425911,78.4354774,Hyderabad,Hyderabad Zone,indian,N/A,osm
+1885680325,Cream Stone,17.4248564,78.4220264,Hyderabad,Hyderabad Zone,ice_cream,N/A,osm
+1909499642,SpiceTribe,17.439117,78.3977184,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1948590601,Thai Express,17.4265983,78.4382251,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+1985561846,Udupi Uphar,17.4409145,78.360695,Hyderabad,Hyderabad Zone,indian,N/A,osm
+2062730675,Green Bawarchi,17.4299491,78.4284395,Hyderabad,Hyderabad Zone,indian,N/A,osm
+2093444964,Domino's,17.441271,78.358934,Hyderabad,Hyderabad Zone,pizza,N/A,osm
+2134522890,Chick King,17.4411739,78.3912705,Hyderabad,Hyderabad Zone,sandwich,N/A,osm
+2134523285,Dil Punjabi,17.4412924,78.3913618,Hyderabad,Hyderabad Zone,sushi,N/A,osm
+2177955040,Vinflora,17.4295786,78.4295853,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2354681432,Hotel Bhimas,17.4072009,78.3919003,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2403426783,Minerva,17.4372461,78.4459874,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2521055369,Pollito's,17.4419662,78.4459565,Hyderabad,Hyderabad Zone,fried_chicken,N/A,osm
+2550415995,Manpasand Veg restaurant,17.4419399,78.359374,Hyderabad,Hyderabad Zone,indian,N/A,osm
+2606351757,Rock Castle,17.4209782,78.4424101,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2706495174,hyderabad restaurant,17.4363,78.4325861,Yousufguda Basti,Hyderabad Zone,"fine_dining, arab, kebab, curry, indian",N/A,osm
+2706495852,margi hotel,17.4365712,78.4339299,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2710632106,Rumaan Cafe,17.3988889,78.4164898,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2794485602,Chocolate Room,17.4391952,78.3983227,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2835235995,Midland bakery,17.4507555,78.4244982,Rajiv nagar X road,Hyderabad Zone,burger,N/A,osm
+2835242778,Surabhi Restaurant,17.4552469,78.4227224,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+2875118608,Maharaja Chat,17.4408585,78.3965959,Hyderabad,Hyderabad Zone,regional,N/A,osm
+3008092655,Eat Central,17.4412679,78.3825065,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+3159027234,Cake Exotica,17.4372961,78.4414105,Yousufguda Main Road,Hyderabad Zone,"burger, pizza, pastry, cake",N/A,osm
+3159028270,Mainland China,17.4506078,78.3808666,Hitec City - Kondapur Main Road,Hyderabad Zone,chinese,N/A,osm
+3384194299,GOUSIA CAFE,17.4643217,78.3759154,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+3474702622,Godavari ruchulu,17.4318064,78.4468436,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+3538200897,Cuppa,17.468184,78.3756498,Hyderabad,Hyderabad Zone,regional,N/A,osm
+3554603086,Parathas,17.4620094,78.3672971,Hyderabad,Hyderabad Zone,regional,N/A,osm
+3558158456,The Square,17.472641,78.372879,Hyderabad,Hyderabad Zone,international,N/A,osm
+3638711628,Little Italy,17.4160322,78.4168158,Road No-92,Hyderabad Zone,Varied,N/A,osm
+3638804612,Grand Ma Bakery,17.41697,78.4384751,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+3943140439,habanero,17.447991,78.3789356,Hyderabad,Hyderabad Zone,mexican,N/A,osm
+3943151562,Napasang restaurant,17.4414984,78.359597,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+3943151563,Telahu,17.445775,78.3775213,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4407583397,House of Dosas,17.4235207,78.4292446,Hyderabad,Hyderabad Zone,indian,N/A,osm
+4407603692,Rams Dosa,17.4232992,78.4292804,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4418972989,Almas,17.4426528,78.441636,Hyderabad,Hyderabad Zone,regional,N/A,osm
+4515082115,Rice Bowl,17.4580828,78.3715746,Hyderabad,Hyderabad Zone,regional,N/A,osm
+4566238603,Absolute Barbecues (ABs),17.4383572,78.3977922,Jubilee Hills Road No 36,Hyderabad Zone,Varied,N/A,osm
+4646388694,Ambica Mess,17.412664,78.395312,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4670741589,Mehfil,17.4145143,78.3942156,Hyderabad,Hyderabad Zone,chicken,N/A,osm
+4676142991,Lakshmi Priya Restaurant,17.4173025,78.4125036,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4705388500,Sardarji's Dhaba,17.4419765,78.3571717,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4711427792,Swagath Restaurant,17.4160054,78.4108236,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4716858191,Sirisha Hotel,17.4142515,78.4087631,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4716915296,Sri Sankar Vilas,17.4143783,78.408852,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4729118789,Olive Kitchen,17.4427579,78.3557117,Hyderabad,Hyderabad Zone,"regional, chinese, indian, kebab",N/A,osm
+4729119789,Diner's Pavilion,17.4428005,78.3552166,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4769501963,Brundavan,17.4137026,78.4070873,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4784090873,Labonel fine baking,17.4368647,78.3665736,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+4784090874,Dine o China,17.4366907,78.3668204,Hyderabad,Hyderabad Zone,chinese,N/A,osm
+5160665781,President Dhaba,17.4500761,78.3858133,"Image Garden Road, Hyderabad",Hyderabad Zone,"indian, regional, chinese",N/A,osm
+5257229421,Ciclo Café,17.4336528,78.4047279,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5259994123,Kaficko,17.4246579,78.4101163,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5291150521,Hyderabad Spice,17.4413494,78.396511,madhapur road,Hyderabad Zone,Varied,N/A,osm
+5375596703,Tom Yum Yum,17.4297031,78.4125334,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5404824143,SVK canteen,17.4359971,78.3600653,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405054117,Al lbbik shwrma,17.4334434,78.3697384,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405054121,Chicken pakodi,17.4408039,78.3602769,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405054245,Al saba resturant,17.4336913,78.3694867,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405055149,13 dhaba,17.4376619,78.3654841,gachibowli circle,Hyderabad Zone,Varied,N/A,osm
+5405055453,Simply south,17.4426689,78.3571426,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405056232,Rock deal restaurant  and bar,17.4415779,78.3585643,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405056315,Santosh dhaba,17.4410918,78.3605047,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405056434,UP THE BISTRO,17.4358331,78.3666724,Telecom nagar,Hyderabad Zone,Varied,N/A,osm
+5405057633,Sweet basket,17.4338731,78.3689055,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405058516,Pulav curry rice,17.4378258,78.3656803,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5405060691,Chak de restaurant,17.4395223,78.3638742,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5448265105,Starbucks,17.4329059,78.4071232,Hyderabad,Hyderabad Zone,coffee_shop,N/A,osm
+5459525615,Kafe Tirupati,17.441612,78.3914323,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5467328880,Kalinga's Kitchen,17.4469404,78.3917078,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5469130135,Annapurna Tiffens,17.4518379,78.391518,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5515637839,Melting pot,17.4414144,78.3812898,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5515637842,Dunkin',17.4412709,78.3813752,Hyderabad,Hyderabad Zone,"donut, coffee_shop",N/A,osm
+5611008663,Bahar café,17.4472359,78.3784684,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5692072169,Sampradhaya curry point,17.446934,78.3918229,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5793698165,Golconda Chef,17.4455723,78.3925382,Hyderabad,Hyderabad Zone,indian,N/A,osm
+5826347075,ManiChandana Restaurant,17.4414246,78.3598766,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5867186858,Country Oven,17.4303405,78.4381599,"Sri Nagar Colony Main Road, Hyderabad",Hyderabad Zone,"pizza, burger, sandwich",N/A,osm
+5883774727,Mudita,17.4055752,78.3913202,Hyderabad,Hyderabad Zone,nepalese,N/A,osm
+5931166341,Charcoal Bbq,17.4475331,78.3918768,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5942734591,Minevera Coffee Shop,17.4461557,78.384665,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5942781129,Flechazo,17.4464954,78.3843723,Hyderabad,Hyderabad Zone,"indian, asian",N/A,osm
+5942783243,Appetito,17.4456498,78.3859665,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5942783245,Abhiruchi Restaurant,17.4456195,78.3861795,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5942847663,Eat Country Style,17.4454605,78.3862392,Hyderabad,Hyderabad Zone,"chicken, chinese, fish, indian, regional",N/A,osm
+5957452586,Pan Shop,17.444902,78.3866088,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5965559685,Soma's Kitchen,17.4442825,78.3879877,Hyderabad,Hyderabad Zone,indian,N/A,osm
+5965559686,Aadi Raghavendra Udupi Veg,17.4441489,78.3880973,Hyderabad,Hyderabad Zone,"chinese, indian",N/A,osm
+5970759667,Rayalaseema Ruchulu,17.4466084,78.38426,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+5973746986,ISTANBUL AUTHENTIC DONER KEBAB,17.4306846,78.4080527,Jubilee Hills Road No 36,Hyderabad Zone,Varied,N/A,osm
+5980853188,Ulavucharu,17.4240217,78.4120683,Hyderabad,Hyderabad Zone,indian,N/A,osm
+5994099219,Canteen,17.4183652,78.4102473,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6009842126,Spicy Hub,17.4448983,78.3873777,Hyderabad,Hyderabad Zone,"asian, chicken, indian",N/A,osm
+6036830618,Hyderabadi dawat,17.4497953,78.3635491,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6036883486,Absolute barbeque (ab's),17.4429689,78.357398,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6089840786,Terrasen Cafe,17.4204876,78.4410872,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6191414038,Hot Chips,17.443883,78.3870128,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6191762120,B- Eats,17.4431896,78.3880625,Hyderabad,Hyderabad Zone,"Biryanis, chinese, South_Indian, North_Indian",N/A,osm
+6213051886,Jubilee Hills Peddammathalli Mess,17.4290022,78.4051709,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6215854388,Sri Vijaya Laxmi Food Court,17.4314428,78.4064374,Hyderabad,Hyderabad Zone,"chicken, breakfast",N/A,osm
+6246439585,Kritunga,17.4514807,78.3937843,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6246440085,Freak Shake,17.4540505,78.3829633,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6246451485,Fisher Me,17.4741766,78.3877088,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6248946494,Thansi,17.4432774,78.3935366,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6248961886,Ahilobhilam Foods,17.4549917,78.3841449,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6257498485,Flavors,17.4581306,78.3715006,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6259475085,hyderabad host,17.4417444,78.3966967,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6259475585,Palamuri Grill,17.4522477,78.3850331,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6261439688,Urban Vilage,17.4522212,78.3852733,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6261444885,Wingster,17.4515049,78.39417,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6266078685,Drunken Monkey,17.4420216,78.38814,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6268103691,T-grill,17.4425382,78.3961507,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6268240985,Brickwood,17.4412498,78.3885797,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6273886287,Prince DriveInn,17.4590933,78.3848255,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6312938485,Chutneys,17.4296732,78.4096135,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6340136985,Chop Stick,17.4301054,78.4457025,Hyderabad,Hyderabad Zone,chinese,N/A,osm
+6352370685,Dostea Chai Café,17.4414944,78.3916686,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6369867752,Chai village,17.4409109,78.4431992,Road No. 1 SR Nagar,Hyderabad Zone,Varied,N/A,osm
+6370434382,Udipi Park Hotel,17.4374107,78.4456459,"meghamala apartments road, hyderabad",Hyderabad Zone,regional,N/A,osm
+6409579586,Mandi@36,17.4307294,78.4078308,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6414144247,Indi Chai,17.4076128,78.390142,Hyderabad,Hyderabad Zone,indian,N/A,osm
+6485323329,Lucky Restaurant,17.4406202,78.3930877,Hyderabad,Hyderabad Zone,indian,N/A,osm
+6621607787,Taaza Kitchen,17.4525736,78.3913595,Hyderabad,Hyderabad Zone,"indian, south_indian",N/A,osm
+6633197605,ITC Kohenur,17.4324002,78.3854882,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6684817721,Sai Darshini,17.4419503,78.4404,"Vengal Rao Nagar Main Road, SR Nagar, Hyderabad",Hyderabad Zone,regional,N/A,osm
+6684817722,Shareef Bhai Chicken & Fish Fry Bandi,17.442126,78.4404137,Hyderabad,Hyderabad Zone,indian,N/A,osm
+6697930152,Imroze Cafe,17.4342826,78.4457999,Hyderabad,Hyderabad Zone,regional,N/A,osm
+6723691439,Arati Fast Food,17.4408777,78.4400324,Hyderabad,Hyderabad Zone,regional,N/A,osm
+6723691440,Universal Kababs & Biryani,17.4417429,78.4401706,Hyderabad,Hyderabad Zone,indian,N/A,osm
+6821427385,Ahwaanam Fast Food,17.4408073,78.4455707,6th Lane,Hyderabad Zone,Varied,N/A,osm
+6822126487,Hotel Mourya's Restaurant,17.437544,78.440502,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126500,Athidi Aahar,17.47325,78.42188,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126520,Turkish restaurant,17.3988674,78.411513,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126525,SHIVANYA RESTAURANT,17.4325622,78.4460138,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126533,Telangana tea stall,17.4192438,78.4418493,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126568,Sai Balaji Tiffins,17.4388279,78.4370548,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126581,"Broadway Cafe, Bakers & Tiffins",17.469468,78.425618,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126589,New Banjara Cafe,17.469455,78.422083,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126608,Date With Soup Restaurant,17.442481,78.439334,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126615,SITARA FOODS,17.443536,78.433898,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126623,Sikander Irani Tea And Snacks Point,17.4377802,78.4401942,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6822126642,Akhila Tiffins,17.439792,78.441577,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6840941123,B. DUBS,17.4337768,78.4049578,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6847914720,Sanman Tiffins,17.45333,78.434959,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6855217386,Siddique Kebab,17.4610271,78.3664467,Gachibowli - Miyapur Highway,Hyderabad Zone,Varied,N/A,osm
+6868660419,DELHI WALA SWEETS,17.4566065,78.4225875,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6868689295,Brothers Bawarchi,17.4541799,78.419381,"borabanda allahapur road, HYDERABAD",Hyderabad Zone,"kebab, indian, chicken, seafood",N/A,osm
+6893579787,Esplanade,17.4062229,78.3910319,Hyderabad,Hyderabad Zone,indian,N/A,osm
+6909347687,Aaha Coffee Shop,17.4066812,78.3903555,Hyderabad,Hyderabad Zone,indian,N/A,osm
+6909365985,Aaha Food Village,17.4067359,78.3903084,Hyderabad,Hyderabad Zone,indian,N/A,osm
+6934838950,Fudzy,17.4488567,78.38912,"Jai Hind Gandhi Road, Hyderabad",Hyderabad Zone,regional,N/A,osm
+6935318131,Rams,17.4402465,78.361869,"Outer Ring Road, Hyderabad",Hyderabad Zone,"coffee_shop, burger, kebab, pizza",N/A,osm
+6935579741,The grand truck road,17.4518874,78.3856618,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6935609217,The sweet tooth,17.4466519,78.3888618,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6936829973,Bawarchi Restaurant,17.4368021,78.4287507,"Yousufguda Main Road, hyderabad",Hyderabad Zone,"indian, kebab, chicken",N/A,osm
+6937779968,Punjabi Tadka,17.462468,78.365615,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6938853685,180 Degree Oven,17.4066221,78.3901855,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6982568886,ZARA Hi-Fi,17.4399027,78.363732,Gachibowli - Miyapur Highway,Hyderabad Zone,Varied,N/A,osm
+6982568887,Y9 Cafe & Restuarant,17.4484432,78.3602756,DLF Road,Hyderabad Zone,Varied,N/A,osm
+6994597339,Abhiruchi,17.4377697,78.3900781,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+6997870508,The Hoppery,17.4300591,78.3911379,Hyderabad,Hyderabad Zone,vietnamese,N/A,osm
+7010429411,Spar Kitchen,17.4576504,78.3634724,Hyderabad,Hyderabad Zone,"international, italian, pizza",N/A,osm
+7021303608,Amber,17.4367771,78.3891419,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303640,Foodie Resto,17.4417241,78.3852879,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303711,Tea Trails Cafe,17.4373534,78.3853935,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303726,Chinatown,17.4431428,78.3879241,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303727,Krazy Chef,17.443142,78.3877529,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303729,Urban Spice kitchen,17.4463118,78.3887776,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303730,Onesta Restaurant,17.4492551,78.3858169,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303731,Sambal,17.4378342,78.3884652,Hyderabad,Hyderabad Zone,indonesian,N/A,osm
+7021303732,Southwok Restaurant,17.4378381,78.3871372,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303733,Grand Spicy Bawarchi,17.4447002,78.386046,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303734,Ayathi Restaurant,17.4450565,78.3856161,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303735,Naidu Gari Ruchulu,17.4495149,78.3854475,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303736,Simhapuri Deluxe,17.4513665,78.3866436,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303737,Nala Bhimas Restaurant,17.4348953,78.3937529,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303738,Barbeque Pride,17.4348951,78.4022289,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7021303761,SK Fast Food,17.4499993,78.3854651,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025803845,Ankapur Kitchen,17.4452494,78.3907983,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820724,Balaji Hyderabad Mithai Bhandar,17.4413554,78.388307,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820753,Sampradaya Ruchulu Restaurant,17.4385383,78.3902999,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820764,Beach House,17.4386399,78.3948138,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820773,Bake Factory Kitchens,17.4462187,78.3988928,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820780,The Blender's Cafe,17.4442543,78.3973902,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820782,Chinese Cornerz,17.4458679,78.3924181,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820783,Desi Dhabha,17.4458496,78.3925347,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820793,Sree Uma Grand - Multicuisine Restaurant,17.4427049,78.3930518,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820810,Mustard,17.4369759,78.3891408,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820811,Burgandi,17.4369089,78.3892028,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820813,Shake Stories,17.4475218,78.3944099,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820814,HutK Restaurant,17.4515635,78.3936807,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820815,Dhanyatha Foods,17.4498409,78.3934938,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820821,Super Lean Meals,17.4516412,78.3924843,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820823,The London Shakes,17.4513469,78.3917665,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820825,Organic Thali kitchen,17.4476207,78.3910935,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820832,Inner Chef,17.4493044,78.3911004,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820838,Waffle House,17.4346129,78.3939618,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820842,Krishna's Kitchen,17.4357999,78.3946868,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820846,Zza Bar @ Syala 95A,17.4367499,78.3970998,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820854,Ciclo Cafe & Bicycle Shop,17.4336999,78.4043358,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820863,7Ten Spa,17.435928,78.4029825,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820871,Thurum Khan Restaurant,17.4404015,78.3935559,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820883,Ghar Ka Khaana,17.4404308,78.3923717,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820886,Madhapur Bawarchi,17.4407157,78.3924993,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820891,Oven Italia,17.4416678,78.3912208,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820893,Sri Sai Venkateshwara Hotel,17.4415454,78.3912131,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820897,The Adda,17.4415331,78.3906461,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820902,Shree Santhosh Family Dhaba,17.4416446,78.3906575,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820906,Sanjha Chulha Punjabi Food Joint,17.4415069,78.3888758,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820911,Brickwood Pizza,17.4412922,78.3884437,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820913,Lassi Bistro,17.4417109,78.3884808,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820916,The Burrito Bowl,17.4414119,78.3880408,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820918,Tumba Bengali Food,17.4420469,78.3881578,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7025820919,Eatsome,17.4418969,78.3881888,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7027716893,Restaurant Guest Wifi Solutions,17.4508318,78.3947564,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7027716895,Kitchen 007,17.4499217,78.3949095,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7027716897,Tollywood Thick Shakes,17.4499292,78.3947616,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7043245719,Chai Point,17.443382,78.3917089,Hyderabad,Hyderabad Zone,coffee_shop,N/A,osm
+7043416947,Samskruthi Hotel,17.4507279,78.3642689,"Gachibowli - Miyapur Highway, Hyderabad",Hyderabad Zone,Varied,N/A,osm
+7113964286,Fast food and tiffin center,17.4321538,78.4258487,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7113996685,Laiba's cafe,17.4314834,78.4260064,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7113998188,Fit food company,17.4290692,78.4182366,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7165460276,ms bakers,17.4529966,78.4244866,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7171334821,rayudu tiffen center,17.4545011,78.4233113,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7171334823,Rayudu family restarant,17.454076,78.4234206,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7171334826,santosh family dabha,17.455022,78.4222353,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+7243983824,MRCB  Restaurant,17.4135599,78.4040268,"Road No 78, Jubilee Hills, Hyderabad",Hyderabad Zone,regional,N/A,osm
+7243983826,Dhivija's Take away,17.4153883,78.4086766,"Road No 78, Jubilee Hills, Hyderabad",Hyderabad Zone,regional,N/A,osm
+7243983830,Santhosh Family Dhaba,17.4138568,78.3948337,"Old Bombay Highway, Hyderabad",Hyderabad Zone,regional,N/A,osm
+7244029373,Rajugari Pulav,17.4069621,78.3923977,"O.U.Colony, Hyderabad",Hyderabad Zone,regional,N/A,osm
+7244029374,Biryani's & More,17.4071414,78.3926167,"O.U.Colony, Hyderabad",Hyderabad Zone,regional,N/A,osm
+7248877412,Pakwan Grand,17.4260706,78.3771794,"Old Bombay Highway, Hyderabad",Hyderabad Zone,"regional, kebab, indian, chicken",N/A,osm
+7248877413,Shah Ghouse,17.4266793,78.3764491,"Old Bombay Highway, Hyderabad",Hyderabad Zone,Varied,N/A,osm
+7248877416,Ohri's Nautankigalli,17.4446507,78.376725,"Hitec City Road, Hyderabad",Hyderabad Zone,Varied,N/A,osm
+7608583804,Bezawada Bhojanam,17.4648665,78.3652279,"police colny road, Hyderabad",Hyderabad Zone,Varied,N/A,osm
+7608653251,Ye Lo Chai,17.4646797,78.3653234,"police colny road, Hyderabad",Hyderabad Zone,coffee_shop,N/A,osm
+7608736502,Bihari Mama Hotel,17.4646284,78.3654699,"police colny road, Hyderabad",Hyderabad Zone,Varied,N/A,osm
+7611061441,Taco Bell,17.4576146,78.3645591,Hyderabad,Hyderabad Zone,tex-mex,N/A,osm
+7611073843,Rasooi Ghar,17.4580968,78.3645179,"Gachibowli - Miyapur Highway, Hyderabad",Hyderabad Zone,Varied,N/A,osm
+7874934614,HOLY KITCHEN,17.4332799,78.4262644,"Yousufguda Main Road, hyderabad",Hyderabad Zone,"chinese, thai",N/A,osm
+8107755744,M/s. Grills N Chills,17.4442222,78.4328434,"Kalyan Nagar Cross Road, Hyderabad",Hyderabad Zone,"kebab, indian, chinese, chicken",N/A,osm
+8107767453,Amaravathi Tiffens,17.4405705,78.441619,Hyderabad,Hyderabad Zone,"regional, indian",N/A,osm
+8107785189,Akshya Tiffens,17.4504985,78.4244868,Hyderabad,Hyderabad Zone,"regional, indian",N/A,osm
+8111012820,Goa grillz,17.397361,78.3776389,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+8111012824,Cherry fast food,17.4001895,78.3783636,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+8386697006,Hi-tech fast food center,17.4718001,78.3888824,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+8909248520,Oh My Grill,17.4422359,78.4323511,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+8909248526,Sai Durga Family Restuarant,17.4440228,78.43349,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+9094232018,Vindhu Tiffins,17.4419954,78.4440716,Sanjeeva Reddy Nagar Colony Main Road,Hyderabad Zone,Varied,N/A,osm
+9150847517,HummingBird Café,17.440457,78.3974255,kavuri hills road,Hyderabad Zone,Varied,N/A,osm
+9903874812,Hderabad restaurant,17.4419092,78.432369,Basti,Hyderabad Zone,"chinese, biryani",N/A,osm
+9903904325,Orient Cafe,17.4440151,78.4458097,"BK Guda Road, Sanjeeva Reddy Nagar, Hyderabad",Hyderabad Zone,Varied,N/A,osm
+9917000634,Ananya Food Court,17.4501371,78.3915731,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+9917006217,Hitech Bawarchi,17.4411978,78.3916463,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+9958221196,Udipi's Aahar,17.449277,78.3639805,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10171328862,Red Bucket,17.4516821,78.392479,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10171328869,Mukka Mudda,17.450138,78.391885,Hyderabad,Hyderabad Zone,indian,N/A,osm
+10171328871,Cosa de Rosa,17.447691,78.3919352,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10171342017,Raju Gari Biriyani,17.4462141,78.3921748,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10171342023,Fresh Juice,17.4457784,78.3924176,Hyderabad,Hyderabad Zone,juice,N/A,osm
+10178228307,Nectar Kitchen & Bar,17.4384489,78.3990271,"Jubilee Hills Road No 36, Hyderabad",Hyderabad Zone,"indian, chinese, dessert, pizza, burger, chicken, kebab, ice_cream, seafood, juice",N/A,osm
+10314279709,Kshatriya Foods,17.4391715,78.397936,"Sri Rama Colony, Madhapur, Hyderabad, Telangana",Hyderabad Zone,indian,N/A,osm
+10718145768,McCafé,17.4480798,78.3790681,Hyderabad,Hyderabad Zone,coffee_shop,N/A,osm
+10718145771,Fire Water,17.4479014,78.3791248,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10718148977,Karachi Cafe,17.4415605,78.3767286,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10718148978,Burger King,17.4416568,78.376817,Hyderabad,Hyderabad Zone,burger,N/A,osm
+10718148979,Aharam,17.4417612,78.3768381,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10732482012,Zeeshaan Cafe,17.397285,78.4006455,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10732489637,Shazaan Cafe,17.3974757,78.4009687,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10790318144,Pista House,17.4316137,78.3720027,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10790345914,Hyderama,17.4312883,78.3712001,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10790477557,Naatu,17.4299749,78.4110349,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10790483073,Krishnapatnam,17.4299418,78.4113051,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10795095588,Aaromale,17.4128381,78.4066158,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+10796197655,LEGEND'S FOOD COURT,17.4545044,78.4164006,"borabanda allahapur road, HYDERABAD",Hyderabad Zone,"chinese, regional",N/A,osm
+11027534546,Rose land cafe,17.4321204,78.4461681,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11082456157,Habeeb Hotel and cafe,17.4558823,78.4092741,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11082456164,Hina J.K Point,17.4557125,78.4091484,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11082456191,Tiffin center,17.4553927,78.4102457,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11082688354,Mdina Hotel And Cafe,17.4535391,78.4090708,Hyderabad,Hyderabad Zone,"indian, tea",N/A,osm
+11084918124,Blue Star Restaurant,17.450874,78.4244652,Hyderabad,Hyderabad Zone,"chinese, chicken, indian, kebab, fish",N/A,osm
+11084918128,Mubarak Cafe And Restarunt,17.4468771,78.4232229,Hyderabad,Hyderabad Zone,"kebab, indian",N/A,osm
+11084918135,A.K cafe,17.4542528,78.4105217,Hyderabad,Hyderabad Zone,bubble_tea,N/A,osm
+11084918136,Ali Cafe,17.4542841,78.4109675,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11084918139,Bread Shop,17.4549262,78.4090464,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11084969227,Erra Karam,17.4360976,78.4121092,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11597256218,SO - The Sky Kitchen,17.4161279,78.416848,Rd 92,Hyderabad Zone,Varied,N/A,osm
+11597323663,Roastery,17.4232807,78.4315491,Rd 14,Hyderabad Zone,Varied,N/A,osm
+11597368004,Third Wave Coffee,17.4574395,78.372086,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11597368919,Autumn Leaf,17.4337892,78.4020089,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11597374603,Oh! Calcutta,17.4528112,78.3803019,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+11730656638,Dosa Street,17.4518424,78.3655372,Hyderabad,Hyderabad Zone,indian,N/A,osm
+12257749405,kismath kerala Restaurand,17.3984652,78.4005577,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+12298767100,Wraps & Broast,17.4504422,78.4253744,Hyderabad,Hyderabad Zone,"pizza, pasta, fried_chicken, wraps, sandwich, chinese",N/A,osm
+12410053301,Hibacci - Asian Fusion Restaurant,17.4192631,78.4427505,Hyderabad,Hyderabad Zone,asian,N/A,osm
+12532085105,Old Madras Biryani,17.403499,78.3716748,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+12695800228,Stellar Reserve,17.4226437,78.4109735,"Nandagiri Hills, Jubilee Hills, Hyderabad",Hyderabad Zone,"american, italian, bakery, asian, cafe, burger, pizza",N/A,osm
+12839760926,Vibrant Living,17.4180127,78.3795955,"Prashant Hills, Rai Durg",Hyderabad Zone,Varied,N/A,osm
+12972335837,Mamagoto,17.4580228,78.3729279,"Hitec City - Kondapur Main Road, Hyderabad",Hyderabad Zone,chinese,N/A,osm
+12972335840,Taara South Indian Kitchen,17.4573947,78.3720037,"Hitec City - Kondapur Main Road, Hyderabad",Hyderabad Zone,indian,N/A,osm
+12972335841,Figaro Pizza,17.457471,78.3719505,Hyderabad,Hyderabad Zone,pizza,N/A,osm
+12976196537,Seven Sisters,17.4682741,78.3757716,Hyderabad,Hyderabad Zone,"asian, japanese, indonesian, thai",N/A,osm
+12976261868,Churrolto,17.4565417,78.3762981,Hyderabad,Hyderabad Zone,"italian, mexican, spanish",N/A,osm
+13088224018,juices and fast food,17.4411442,78.3588597,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13123278412,IGURU,17.4181368,78.3752194,Hyderabad,Hyderabad Zone,indian,N/A,osm
+13196312446,This The Place!,17.4440806,78.3847896,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13198367702,Patiala Plate,17.4421906,78.356953,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13208170233,Arya Bhavan,17.4509081,78.4369028,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13279648101,Forget Me Not Cafe,17.4374797,78.3893004,Durgam Cheruvu Road,Hyderabad Zone,"chicken, coffee_shop, grill, ice_cream, indian, local, noodles",N/A,osm
+13285248836,Subhodayam Tiffins,17.4485112,78.3566326,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13285248838,Sri Vindha Tiffins,17.4488664,78.3573731,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13285248840,Mojo Pizza,17.4484906,78.3588434,Hyderabad,Hyderabad Zone,pizza,N/A,osm
+13285248842,Palleturi Dosa,17.4484768,78.3591308,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13285248845,Chai Kings,17.4484875,78.3601297,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13285248850,Iron Hill Cafe,17.4480536,78.3611554,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13287712047,RS Dhaba Restaurant,17.4511433,78.3695527,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13287712051,Madina Hotel,17.4510666,78.3689889,Hyderabad,Hyderabad Zone,Varied,N/A,osm
+13408726292,Tteokbokki,17.4187459,78.3773857,Hyderabad,Hyderabad Zone,korean,N/A,osm
+13409224011,Si Nonna's,17.4202396,78.3796007,Hyderabad,Hyderabad Zone,pizza,N/A,osm
+13423220018,Keshav Reddy Sweets,17.4200353,78.379703,Hyderabad,Hyderabad Zone,indian,N/A,osm
+13423220019,Emerald Mithai Shop,17.4208817,78.3792387,Hyderabad,Hyderabad Zone,indian,N/A,osm
+13637629024,Ajay Fast Food,17.4493963,78.3921835,Hyderabad,Hyderabad Zone,Varied,N/A,osm

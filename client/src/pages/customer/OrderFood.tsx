@@ -202,7 +202,7 @@ export default function OrderFood() {
           compact={true}
         />
         <button
-          className="btn btn-ghost"
+          className="btn btn-ghost hide-mobile"
           onClick={() => cartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
         >
           🛒 Cart ({count})
@@ -441,6 +441,17 @@ export default function OrderFood() {
           </aside>
         </div>
       </div>
+
+      {count > 0 && (
+        <div
+          className="cart-float-bar"
+          onClick={() => navigate('/customer/cart')}
+        >
+          <div className="cart-float-count">{count} item{count !== 1 ? 's' : ''}</div>
+          <div className="cart-float-label">View Cart</div>
+          <div className="cart-float-total">₹{total.toFixed(0)} →</div>
+        </div>
+      )}
     </>
   );
 }

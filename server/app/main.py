@@ -31,7 +31,8 @@ async def connect(sid, environ, auth=None):
                         if partner:
                             connected_partners[sid] = partner.id
                             await sio.enter_room(sid, "delivery_partners")
-                            print(f"Partner {partner.id} joined delivery_partners room")
+                            await sio.enter_room(sid, f"partner_{partner.id}")
+                            print(f"Partner {partner.id} joined delivery_partners and partner_{partner.id} rooms")
                     db.close()
                 except Exception:
                     pass
@@ -63,7 +64,7 @@ async def location_update(sid, data):
         await sio.emit(
             "partner_location",
             {"partner_id": partner_id, "lat": lat, "lng": lng, "speed_kmh": speed},
-            room=f"order_tracking",
+            room=f"partner_{partner_id}",
         )
         from app.config import settings
         if speed > settings.SPEED_LIMIT_KMH:
